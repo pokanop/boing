@@ -1,12 +1,12 @@
 import XCTest
-@testable import Morph
+@testable import Boing
 
-final class MorphTests: XCTestCase {
+final class BoingTests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        XCTAssertEqual(Morph().text, "Hello, World!")
+        
     }
 
     static var allTests = [

@@ -1,7 +1,7 @@
 import XCTest
 
-import MorphTests
+import BoingTests
 
 var tests = [XCTestCaseEntry]()
-tests += MorphTests.allTests()
+tests += BoingTests.allTests()
 XCTMain(tests)

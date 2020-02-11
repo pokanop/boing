@@ -1,6 +1,6 @@
 //
 //  ViewExtensions.swift
-//  Morph
+//  Boing
 //
 //  Copyright © 2020 Pokanop Apps. All rights reserved.
 //

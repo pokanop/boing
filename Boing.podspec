@@ -1,5 +1,5 @@
 #
-#  Be sure to run `pod spec lint Morph.podspec' to ensure this is a
+#  Be sure to run `pod spec lint Boing.podspec' to ensure this is a
 #  valid spec and to remove all comments including this before submitting the spec.
 #
 #  To learn more about Podspec attributes see https://guides.cocoapods.org/syntax/podspec.html
@@ -15,7 +15,7 @@ Pod::Spec.new do |spec|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  spec.name         = "Morph"
+  spec.name         = "Boing"
   spec.version      = "0.1.0"
   spec.summary      = "A simple and powerful animation API for views in Swift."
 
@@ -25,12 +25,12 @@ Pod::Spec.new do |spec|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   spec.description  = <<-DESC
-    Morph is an animation library written in Swift with a simple and easy to use API for views.
+    Boing is an animation library written in Swift with a simple and easy to use API for views.
     Inspired by several animation libraries, it tries to simplify and bring the best of all of them
     together.
                    DESC
 
-  spec.homepage     = "https://github.com/pokanop/morph"
+  spec.homepage     = "https://github.com/pokanop/boing"
   # spec.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -78,7 +78,7 @@ Pod::Spec.new do |spec|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  spec.source       = { :git => "https://github.com/pokanop/morph.git", :tag => "#{spec.version}" }
+  spec.source       = { :git => "https://github.com/pokanop/boing.git", :tag => "#{spec.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -89,7 +89,7 @@ Pod::Spec.new do |spec|
   #  Not including the public_header_files will make all headers public.
   #
 
-  spec.source_files  = "Morph/Sources/**/*.{swift}"
+  spec.source_files  = "Boing/Sources/**/*.{swift}"
   # spec.exclude_files = "Classes/Exclude"
 
   # spec.public_header_files = "Classes/**/*.h"
@@ -104,7 +104,7 @@ Pod::Spec.new do |spec|
   #
 
   # spec.resource  = "icon.png"
-  # spec.resources = "Morph/**/*.{png,jpeg,jpg,storyboard,xib,xcassets}"
+  # spec.resources = "Boing/**/*.{png,jpeg,jpg,storyboard,xib,xcassets}"
 
   # spec.preserve_paths = "FilesToSave", "MoreFilesToSave"
 
