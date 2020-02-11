@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "Boing"
-  spec.version      = "0.1.0"
+  spec.version      = "0.2.0"
   spec.summary      = "A simple and powerful animation API for views in Swift."
 
   # This description is used to generate tags and improve search results.
