@@ -1,0 +1,6 @@
+framework module Boing {
+  umbrella header "Boing-umbrella.h"
+
+  export *
+  module * { export * }
+}
