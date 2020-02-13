@@ -7,7 +7,7 @@
 
 import UIKit
 
-public enum AnimatingOption {
+public enum AnimatingOption: CaseIterable {
     
     case delay(TimeInterval)
     case duration(TimeInterval)
@@ -17,16 +17,24 @@ public enum AnimatingOption {
     case repeatCount(Float)
     case autoreverse(Bool)
     
+    public static var allCases: [AnimatingOption] {
+        return [.delay(0), .duration(0), .curve(.easeInOut), .damping(0), .velocity(0), .repeatCount(0), .autoreverse(false)]
+    }
+    
 }
 
-public enum AnimatingAxis {
+public enum AnimatingAxis: CaseIterable {
     case horizontal, vertical
 }
 
-public enum AnimatingCurve {
+public enum AnimatingCurve: CaseIterable {
     
     case linear, easeIn, easeOut, easeInOut
     case custom(CGPoint, CGPoint)
+    
+    public static var allCases: [AnimatingCurve] {
+        return [.linear, .easeIn, .easeOut, .easeInOut, .custom(.zero, .zero)]
+    }
     
     func asOptions() -> UIView.AnimationOptions {
         switch self {
@@ -50,7 +58,7 @@ public enum AnimatingCurve {
     
 }
 
-public enum AnimatingDirection {
+public enum AnimatingDirection: CaseIterable {
     
     case none, up, down, left, right
     
@@ -89,13 +97,11 @@ public enum AnimatingDirection {
     
 }
 
-public enum AnimatingPosition {
+enum AnimatingPosition {
     case start, end
 }
 
-
-
-public enum AnimatingType {
+public enum AnimatingType: CaseIterable {
     
     // Basic
     case translate(CGFloat, CGFloat)
@@ -126,6 +132,10 @@ public enum AnimatingType {
     
     // Utilities
     case delay(TimeInterval)
+    
+    public static var allCases: [AnimatingType] {
+        return [.translate(0, 0), .scale(0, 0), .rotate(0), .backgroundColor(.clear), .alpha(0), .frame(.zero), .bounds(.zero), .center(.zero), .fadeIn(.none), .fadeOut(.none), .slide(.none), .squeeze(.none), .zoomIn, .zoomOut, .fall, .shake, .pop, .flip(.none), .morph, .flash, .wobble, .swing, .boing]
+    }
     
     var isViewAnimation: Bool {
         switch self {
