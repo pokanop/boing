@@ -137,6 +137,35 @@ public enum AnimatingType: CaseIterable {
         return [.translate(0, 0), .scale(0, 0), .rotate(0), .backgroundColor(.clear), .alpha(0), .frame(.zero), .bounds(.zero), .center(.zero), .fadeIn(.none), .fadeOut(.none), .slide(.none), .squeeze(.none), .zoomIn, .zoomOut, .fall, .shake, .pop, .flip(.none), .morph, .flash, .wobble, .swing, .boing]
     }
     
+    public var name: String {
+        switch self {
+        case .translate: return "translate"
+        case .scale: return "scale"
+        case .rotate: return "rotate"
+        case .backgroundColor: return "backgroundColor"
+        case .alpha: return "alpha"
+        case .frame: return "frame"
+        case .bounds: return "bounds"
+        case .center: return "center"
+        case .fadeIn: return "fadeIn"
+        case .fadeOut: return "fadeOut"
+        case .slide: return "slide"
+        case .squeeze: return "squeeze"
+        case .zoomIn: return "zoomIn"
+        case .zoomOut: return "zoomOut"
+        case .fall: return "fall"
+        case .shake: return "shake"
+        case .pop: return "pop"
+        case .flip: return "flip"
+        case .morph: return "morph"
+        case .flash: return "flash"
+        case .wobble: return "wobble"
+        case .swing: return "swing"
+        case .boing: return "boing"
+        case .delay: return "delay"
+        }
+    }
+    
     var isViewAnimation: Bool {
         switch self {
         case .translate, .scale, .rotate, .backgroundColor, .alpha, .frame, .bounds, .center, .fadeIn, .fadeOut, .zoomIn, .zoomOut, .slide, .fall: return true
