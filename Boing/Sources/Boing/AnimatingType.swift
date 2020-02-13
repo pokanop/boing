@@ -101,7 +101,7 @@ enum AnimatingPosition {
     case start, end
 }
 
-public enum AnimatingType: CaseIterable {
+public enum AnimatingType {
     
     // Basic
     case translate(CGFloat, CGFloat)
@@ -132,10 +132,6 @@ public enum AnimatingType: CaseIterable {
     
     // Utilities
     case delay(TimeInterval)
-    
-    public static var allCases: [AnimatingType] {
-        return [.translate(0, 0), .scale(0, 0), .rotate(0), .backgroundColor(.clear), .alpha(0), .frame(.zero), .bounds(.zero), .center(.zero), .fadeIn(.none), .fadeOut(.none), .slide(.none), .squeeze(.none), .zoomIn, .zoomOut, .fall, .shake, .pop, .flip(.none), .morph, .flash, .wobble, .swing, .boing]
-    }
     
     public var name: String {
         switch self {
@@ -338,6 +334,85 @@ public enum AnimatingType: CaseIterable {
             case .shake, .pop, .flip, .morph, .flash, .wobble, .swing, .delay, .boing:
                 break
             }
+        }
+    }
+    
+}
+
+extension AnimatingType: CaseIterable {
+    
+    public static var allCases: [AnimatingType] {
+        return [.translate(0, 0), .scale(0, 0), .rotate(0), .backgroundColor(.clear), .alpha(0), .frame(.zero), .bounds(.zero), .center(.zero), .fadeIn(.none), .fadeOut(.none), .slide(.none), .squeeze(.none), .zoomIn, .zoomOut, .fall, .shake, .pop, .flip(.none), .morph, .flash, .wobble, .swing, .boing]
+    }
+    
+}
+
+extension AnimatingType: Hashable {
+    
+    public func hash(into hasher: inout Hasher) {
+        switch self {
+        case .translate(let x, let y):
+            hasher.combine("translate")
+            hasher.combine(x)
+            hasher.combine(y)
+        case .scale(let x, let y):
+            hasher.combine("scale")
+            hasher.combine(x)
+            hasher.combine(y)
+        case .rotate(let angle):
+            hasher.combine("rotate")
+            hasher.combine(angle)
+        case .backgroundColor(let color):
+            hasher.combine("backgroundColor")
+            hasher.combine(color)
+        case .alpha(let alpha):
+            hasher.combine("alpha")
+            hasher.combine(alpha)
+        case .frame(let frame):
+            hasher.combine("frame")
+            hasher.combine("\(frame)")
+        case .bounds(let bounds):
+            hasher.combine("bounds")
+            hasher.combine("\(bounds)")
+        case .center(let point):
+            hasher.combine("center")
+            hasher.combine("\(point)")
+        case .fadeIn(let direction):
+            hasher.combine("fadeIn")
+            hasher.combine(direction)
+        case .fadeOut(let direction):
+            hasher.combine("fadeOut")
+            hasher.combine(direction)
+        case .slide(let direction):
+            hasher.combine("slide")
+            hasher.combine(direction)
+        case .squeeze(let direction):
+            hasher.combine("squeeze")
+            hasher.combine(direction)
+        case .zoomIn:
+            hasher.combine("zoomIn")
+        case .zoomOut:
+            hasher.combine("zoomOut")
+        case .fall:
+            hasher.combine("fall")
+        case .shake:
+            hasher.combine("shake")
+        case .pop:
+            hasher.combine("pop")
+        case .flip(let direction):
+            hasher.combine("flip")
+            hasher.combine(direction)
+        case .morph:
+            hasher.combine("morph")
+        case .flash:
+            hasher.combine("flash")
+        case .wobble:
+            hasher.combine("wobble")
+        case .swing:
+            hasher.combine("swing")
+        case .boing:
+            hasher.combine("boing")
+        case .delay: hasher.combine("delay")
         }
     }
     
