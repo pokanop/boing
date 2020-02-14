@@ -6,9 +6,14 @@
 //
 
 import SwiftUI
+import Combine
 
-class AnimationsStore {
+class AnimationsStore: ObservableObject {
     
+    @Published var animations: [AnimationContext] = []
     
+    func addAnimation() {
+        animations.append(AnimationContext())
+    }
     
 }

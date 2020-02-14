@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import Boing
 
 struct ContentView: View {
     
+    @ObservedObject var animationsStore: AnimationsStore
     @State var useUIView: Bool = false
     
     var body: some View {
@@ -24,7 +26,11 @@ struct ContentView: View {
                     }
                     
                     Section {
-                        Text("Animation")
+                        ForEach(animationsStore.animations.indexed(), id: \.1.id) { index, context in
+                            NavigationLink(destination: AnimationDetail(context: self.$animationsStore.animations[index])) {
+                                Text(context.title)
+                            }
+                        }
                         Button(action: add) {
                             Text("Add")
                         }
@@ -35,7 +41,8 @@ struct ContentView: View {
                             Text("Animate")
                         }
                     }
-                }.listStyle(GroupedListStyle())
+                }
+                .listStyle(GroupedListStyle())
             }
             .navigationBarTitle("The Boing Demo")
             .navigationBarItems(trailing: EditButton())
@@ -43,7 +50,7 @@ struct ContentView: View {
     }
     
     private func add() {
-        
+        animationsStore.addAnimation()
     }
     
     private func animate() {
@@ -54,6 +61,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(animationsStore: AnimationsStore())
     }
 }
