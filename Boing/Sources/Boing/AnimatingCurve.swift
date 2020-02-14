@@ -38,6 +38,18 @@ public enum AnimatingCurve: CaseIterable {
     
 }
 
+extension AnimatingCurve: Hashable {
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+        if case .custom(let p1, let p2) = self {
+            hasher.combine("\(p1)")
+            hasher.combine("\(p2)")
+        }
+    }
+    
+}
+
 extension AnimatingCurve: Nameable {
     
     public var name: String {
