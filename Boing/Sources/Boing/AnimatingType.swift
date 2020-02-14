@@ -1,105 +1,11 @@
 //
-//  File.swift
-//  
+//  AnimatingType.swift
+//  Boing
 //
-//  Created by Sahel Jalal on 2/10/20.
+//  Copyright © 2020 Pokanop Apps. All rights reserved.
 //
 
 import UIKit
-
-public enum AnimatingOption: CaseIterable {
-    
-    case delay(TimeInterval)
-    case duration(TimeInterval)
-    case curve(AnimatingCurve)
-    case damping(CGFloat)
-    case velocity(CGFloat)
-    case repeatCount(Float)
-    case autoreverse(Bool)
-    
-    public static var allCases: [AnimatingOption] {
-        return [.delay(0), .duration(0), .curve(.easeInOut), .damping(0), .velocity(0), .repeatCount(0), .autoreverse(false)]
-    }
-    
-}
-
-public enum AnimatingAxis: CaseIterable {
-    case horizontal, vertical
-}
-
-public enum AnimatingCurve: CaseIterable {
-    
-    case linear, easeIn, easeOut, easeInOut
-    case custom(CGPoint, CGPoint)
-    
-    public static var allCases: [AnimatingCurve] {
-        return [.linear, .easeIn, .easeOut, .easeInOut, .custom(.zero, .zero)]
-    }
-    
-    func asOptions() -> UIView.AnimationOptions {
-        switch self {
-        case .easeIn: return .curveEaseIn
-        case .easeOut: return .curveEaseOut
-        case .easeInOut: return .curveEaseInOut
-        case .linear: return .curveLinear
-        case .custom: return .curveLinear
-        }
-    }
-    
-    func asTimingFunction() -> CAMediaTimingFunction {
-        switch self {
-        case .easeIn: return CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeIn)
-        case .easeOut: return CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
-        case .easeInOut: return CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
-        case .linear: return CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
-        case .custom(let cp1, let cp2): return CAMediaTimingFunction(controlPoints: Float(cp1.x), Float(cp1.y), Float(cp2.x), Float(cp2.y))
-        }
-    }
-    
-}
-
-public enum AnimatingDirection: CaseIterable {
-    
-    case none, up, down, left, right
-    
-    var translation: CGPoint {
-        switch self {
-        case .none: return CGPoint(x: 0, y: 0)
-        case .up: return CGPoint(x: 0, y: -200)
-        case .down: return CGPoint(x: 0, y: 200)
-        case .left: return CGPoint(x: -200, y: 0)
-        case .right: return CGPoint(x: 200, y: 0)
-        }
-    }
-    
-    var scale: CGPoint {
-        switch self {
-        case .none: return CGPoint(x: 1, y: 1)
-        case .up, .down: return CGPoint(x: 1, y: 2)
-        case .left, .right: return CGPoint(x: 2, y: 1)
-        }
-    }
-    
-    func transform(for type: AnimatingType) -> CATransform3D {
-        switch type {
-        case .flip:
-            switch self {
-            case .none: return CATransform3DIdentity
-            case .up: return CATransform3DMakeRotation(-CGFloat.pi, 1, 0, 0)
-            case .down: return CATransform3DMakeRotation(CGFloat.pi, 1, 0, 0)
-            case .left: return CATransform3DMakeRotation(-CGFloat.pi, 0, 1, 0)
-            case .right: return CATransform3DMakeRotation(CGFloat.pi, 0, 1, 0)
-            }
-        default:
-            return CATransform3DIdentity
-        }
-    }
-    
-}
-
-enum AnimatingPosition {
-    case start, end
-}
 
 public enum AnimatingType {
     
@@ -132,35 +38,6 @@ public enum AnimatingType {
     
     // Utilities
     case delay(TimeInterval)
-    
-    public var name: String {
-        switch self {
-        case .translate: return "translate"
-        case .scale: return "scale"
-        case .rotate: return "rotate"
-        case .backgroundColor: return "backgroundColor"
-        case .alpha: return "alpha"
-        case .frame: return "frame"
-        case .bounds: return "bounds"
-        case .center: return "center"
-        case .fadeIn: return "fadeIn"
-        case .fadeOut: return "fadeOut"
-        case .slide: return "slide"
-        case .squeeze: return "squeeze"
-        case .zoomIn: return "zoomIn"
-        case .zoomOut: return "zoomOut"
-        case .fall: return "fall"
-        case .shake: return "shake"
-        case .pop: return "pop"
-        case .flip: return "flip"
-        case .morph: return "morph"
-        case .flash: return "flash"
-        case .wobble: return "wobble"
-        case .swing: return "swing"
-        case .boing: return "boing"
-        case .delay: return "delay"
-        }
-    }
     
     var isViewAnimation: Bool {
         switch self {
@@ -334,6 +211,39 @@ public enum AnimatingType {
             case .shake, .pop, .flip, .morph, .flash, .wobble, .swing, .delay, .boing:
                 break
             }
+        }
+    }
+    
+}
+
+extension AnimatingType: Nameable {
+    
+    public var name: String {
+        switch self {
+        case .translate: return "translate"
+        case .scale: return "scale"
+        case .rotate: return "rotate"
+        case .backgroundColor: return "backgroundColor"
+        case .alpha: return "alpha"
+        case .frame: return "frame"
+        case .bounds: return "bounds"
+        case .center: return "center"
+        case .fadeIn: return "fadeIn"
+        case .fadeOut: return "fadeOut"
+        case .slide: return "slide"
+        case .squeeze: return "squeeze"
+        case .zoomIn: return "zoomIn"
+        case .zoomOut: return "zoomOut"
+        case .fall: return "fall"
+        case .shake: return "shake"
+        case .pop: return "pop"
+        case .flip: return "flip"
+        case .morph: return "morph"
+        case .flash: return "flash"
+        case .wobble: return "wobble"
+        case .swing: return "swing"
+        case .boing: return "boing"
+        case .delay: return "delay"
         }
     }
     

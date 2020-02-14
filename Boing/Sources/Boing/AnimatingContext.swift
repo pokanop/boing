@@ -1,8 +1,8 @@
 //
-//  File.swift
-//  
+//  AnimatingContext.swift
+//  Boing
 //
-//  Created by Sahel Jalal on 2/10/20.
+//  Copyright © 2020 Pokanop Apps. All rights reserved.
 //
 
 import UIKit
