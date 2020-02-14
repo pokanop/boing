@@ -18,14 +18,14 @@ struct ContentView: View {
             VStack {
                 CircleView()
                 
-                List {
-                    Section {
+                Form {
+                    Section(header: Text("Options")) {
                         Toggle(isOn: $useUIView) {
                             Text("Use UIView")
                         }
                     }
                     
-                    Section {
+                    Section(header: Text("Animations")) {
                         ForEach(animationsStore.animations.indexed(), id: \.1.id) { index, context in
                             NavigationLink(destination: AnimationDetail(context: self.$animationsStore.animations[index])) {
                                 Text(context.title)
@@ -36,7 +36,7 @@ struct ContentView: View {
                         }
                     }
                     
-                    Section {
+                    Section(header: Text("Actions")) {
                         Button(action: animate) {
                             Text("Animate")
                         }

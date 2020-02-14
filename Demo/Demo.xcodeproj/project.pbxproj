@@ -20,6 +20,7 @@
 		974DDBE323F5155B000D4A4B /* AnimationsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974DDBE223F5155B000D4A4B /* AnimationsStore.swift */; };
 		974DDBE523F51808000D4A4B /* Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974DDBE423F51808000D4A4B /* Animation.swift */; };
 		974DDBE723F52D23000D4A4B /* AnimationDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974DDBE623F52D23000D4A4B /* AnimationDetail.swift */; };
+		97D5CA3723F6764100872C9B /* AnimationProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D5CA3623F6764100872C9B /* AnimationProperties.swift */; };
 		ED73003AE7A8F9415D5F62EC /* Pods_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26CE96D4478AF6562706B0B8 /* Pods_Demo.framework */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,7 @@
 		974DDBE223F5155B000D4A4B /* AnimationsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationsStore.swift; sourceTree = "<group>"; };
 		974DDBE423F51808000D4A4B /* Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animation.swift; sourceTree = "<group>"; };
 		974DDBE623F52D23000D4A4B /* AnimationDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationDetail.swift; sourceTree = "<group>"; };
+		97D5CA3623F6764100872C9B /* AnimationProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationProperties.swift; sourceTree = "<group>"; };
 		BA610A26BD830D30774369F4 /* Pods-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.release.xcconfig"; path = "Target Support Files/Pods-Demo/Pods-Demo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -98,6 +100,7 @@
 				97381EB223F3B45C001217F9 /* SceneDelegate.swift */,
 				974DDBE423F51808000D4A4B /* Animation.swift */,
 				974DDBE623F52D23000D4A4B /* AnimationDetail.swift */,
+				97D5CA3623F6764100872C9B /* AnimationProperties.swift */,
 				974DDBE223F5155B000D4A4B /* AnimationsStore.swift */,
 				97381EB423F3B45C001217F9 /* ContentView.swift */,
 				974DDBDE23F50003000D4A4B /* CircleView.swift */,
@@ -245,6 +248,7 @@
 				974DDBE523F51808000D4A4B /* Animation.swift in Sources */,
 				974DDBE723F52D23000D4A4B /* AnimationDetail.swift in Sources */,
 				97381EB523F3B45C001217F9 /* ContentView.swift in Sources */,
+				97D5CA3723F6764100872C9B /* AnimationProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -19,17 +19,15 @@ struct MultiSelectList<T: Selectable>: View {
 
     var body: some View {
         List {
-            ForEach(self.items, id: \.self) { item in
-                MultiSelectListRow(title: item.name, isSelected: self.selections.contains(item)) {
-                    if self.selections.contains(item) {
-                        self.selections.removeAll(where: { $0 == item })
-                    }
-                    else {
-                        self.selections.append(item)
-                    }
-                }
+            ForEach(self.items, id: \.self) { item -> MultiSelectListRow in
+                let binding = Binding(
+                    get: { self.selections.contains(item) },
+                    set: { $0 ? self.selections.append(item) : self.selections.removeAll(where: { $0 == item }) }
+                )
+                return MultiSelectListRow(title: item.name, isSelected: binding)
             }
         }
+        .navigationBarTitle("Animation Types", displayMode: .inline)
     }
     
 }
@@ -46,4 +44,4 @@ extension String: Selectable {
     var name: String { return self }
 }
 
-extension AnimatingType: Selectable {}
+extension AnimationType: Selectable {}
