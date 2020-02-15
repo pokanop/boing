@@ -32,6 +32,7 @@ struct ContentView: View {
                                     .foregroundColor(context.isEmpty ? .red : .black)
                             }
                         }
+                        .onDelete(perform: delete)
                         Button(action: add) {
                             Text("Add")
                         }
@@ -52,6 +53,10 @@ struct ContentView: View {
     
     private func add() {
         animationsStore.addAnimation()
+    }
+    
+    private func delete(at offsets: IndexSet) {
+        animationsStore.removeAnimations(at: offsets)
     }
     
     private func animate() {

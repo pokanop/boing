@@ -16,4 +16,8 @@ class AnimationsStore: ObservableObject {
         animations.append(AnimationContext())
     }
     
+    func removeAnimations(at offsets: IndexSet) {
+        animations.remove(atOffsets: offsets)
+    }
+    
 }
