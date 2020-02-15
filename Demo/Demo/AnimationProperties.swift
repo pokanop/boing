@@ -26,8 +26,8 @@ struct AnimationProperties: View {
                 ))
             } else if animation.associatedProperty == .direction {
                 Picker(selection: $animation.direction, label: Text("direction")) {
-                    ForEach(AnimatingCurve.allCases, id: \.self) { curve in
-                        Text(curve.name)
+                    ForEach(AnimatingDirection.allCases, id: \.self) { direction in
+                        Text(direction.name)
                     }
                 }
             } else if animation.associatedProperty == .point {

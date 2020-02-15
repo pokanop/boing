@@ -48,6 +48,26 @@ class AnimationType: ObservableObject, Identifiable, CaseIterable, Hashable {
         }
     }
     
+    var animatingType: AnimatingType {
+        switch type {
+        case .translate: return .translate(point.x, point.y)
+        case .scale: return .scale(point.x, point.y)
+        case .center: return .center(point)
+        case .rotate: return .rotate(angle)
+        case .backgroundColor: return .backgroundColor(color.uiColor)
+        case .alpha: return .alpha(alpha)
+        case .frame: return .frame(rect)
+        case .bounds: return .bounds(rect)
+        case .fadeIn: return .fadeIn(direction)
+        case .fadeOut: return .fadeOut(direction)
+        case .slide: return .slide(direction)
+        case .squeeze: return .squeeze(direction)
+        case .flip: return .flip(direction)
+        case .delay: return .delay(interval)
+        case .zoomIn, .zoomOut, .fall, .shake, .pop, .morph, .flash, .wobble, .swing, .boing: return type
+        }
+    }
+    
     init(type: AnimatingType = .boing) {
         self.type = type
     }
@@ -62,7 +82,7 @@ class AnimationType: ObservableObject, Identifiable, CaseIterable, Hashable {
     
 }
 
-class AnimationContext: ObservableObject, Identifiable {
+class AnimationContext: ObservableObject, Identifiable, Equatable {
     
     let id: UUID = UUID()
     @Published var animations: [AnimationType] = []
@@ -85,6 +105,18 @@ class AnimationContext: ObservableObject, Identifiable {
     
     var isEmpty: Bool {
         animations.isEmpty
+    }
+    
+    var animatingTypes: [AnimatingType] {
+        return animations.map { $0.animatingType }
+    }
+    
+    var animatingOptions: [AnimatingOption] {
+        return [.delay(delay), .duration(duration), .curve(curve), .damping(damping), .velocity(velocity), .repeatCount(repeatCount), .autoreverse(autoreverse)]
+    }
+    
+    static func == (lhs: AnimationContext, rhs: AnimationContext) -> Bool {
+        lhs.id == rhs.id
     }
     
     func addAnimation() {

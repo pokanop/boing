@@ -10,14 +10,23 @@ import Boing
 
 struct ContentView: View {
     
-    @ObservedObject var animationsStore: AnimationsStore
+    @ObservedObject var store: AnimationsStore
     @State var useUIView: Bool = false
     @State private var needsRefresh: Bool = false
+    @State private var isAnimating: Bool = false
     
     var body: some View {
         NavigationView {
             VStack {
-                CircleView()
+                if useUIView {
+                    GeometryReader { geometry in
+                        HostView(isAnimating: self.$isAnimating, store: self.store)
+                            .padding(40)
+                            .frame(width: geometry.size.height, height: geometry.size.height)
+                    }
+                } else {
+                    CircleView()
+                }
                 
                 Form {
                     Section(header: Text("Options")) {
@@ -27,7 +36,7 @@ struct ContentView: View {
                     }
                     
                     Section(header: Text("Animations")) {
-                        ForEach(animationsStore.animations) { context in
+                        ForEach(store.animations) { context in
                             if self.needsRefresh || !self.needsRefresh {    // HACK: WTF SwiftUI
                                 NavigationLink(destination: AnimationDetail(context: context)) {
                                     Text(context.title)
@@ -59,21 +68,21 @@ struct ContentView: View {
     }
     
     private func add() {
-        animationsStore.addAnimation()
+        store.addAnimation()
     }
     
     private func delete(at offsets: IndexSet) {
-        animationsStore.removeAnimations(at: offsets)
+        store.removeAnimations(at: offsets)
     }
     
     private func animate() {
-        
+        isAnimating = true
     }
     
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(animationsStore: AnimationsStore())
+        ContentView(store: AnimationsStore())
     }
 }
