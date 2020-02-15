@@ -11,6 +11,7 @@ struct ColorView: View {
     
     var color: Color = .blue
     var lineWidth: CGFloat = 2
+    @State var scale: CGFloat = 0
     @Binding var isSelected: Bool
     
     var body: some View {
@@ -18,14 +19,23 @@ struct ColorView: View {
             Circle()
                 .fill(color)
                 .padding(8)
+                .scaleEffect(scale)
             if isSelected {
                 Circle()
                     .stroke(color, lineWidth: lineWidth)
                     .padding(4)
+                    .transition(.opacity)
+            }
+        }
+        .onAppear {
+            withAnimation {
+                self.scale = 1
             }
         }
         .onTapGesture {
-            self.isSelected.toggle()
+            withAnimation {
+                self.isSelected.toggle()
+            }
         }
     }
     
