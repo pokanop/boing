@@ -20,7 +20,7 @@ class AnimationType: ObservableObject, Identifiable, CaseIterable, Hashable {
     @Published var angle: CGFloat = 0
     @Published var point: CGPoint = .zero
     @Published var rect: CGRect = .zero
-    @Published var color: UIColor = .clear
+    @Published var color: Color = .black
     @Published var interval: TimeInterval = 0
     
     static var allCases: [AnimationType] {
@@ -84,8 +84,32 @@ class AnimationContext: ObservableObject, Identifiable {
         animations.count > 0 ? animations.map { $0.type.name }.joined(separator: ", ") : "configure"
     }
     
+    var isEmpty: Bool {
+        animations.isEmpty
+    }
+    
     func addAnimation() {
         animations.append(AnimationType())
     }
 
+}
+
+extension Color {
+    
+    var uiColor: UIColor {
+        switch self {
+        case .black: return .black
+        case .blue: return .blue
+        case .gray: return .gray
+        case .green: return .green
+        case .orange: return .orange
+        case .pink: return .systemPink
+        case .purple: return .purple
+        case .red: return .red
+        case .white: return .white
+        case .yellow: return .yellow
+        default: return .black
+        }
+    }
+    
 }

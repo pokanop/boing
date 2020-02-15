@@ -17,6 +17,7 @@ struct AnimationDetail: View {
             Section(header: Text("Types")) {
                 NavigationLink(destination: MultiSelectList(items: AnimationType.allCases, selections: $context.animations)) {
                     Text(context.title)
+                        .foregroundColor(context.isEmpty ? .red : .black)
                 }
             }
             
@@ -29,47 +30,24 @@ struct AnimationDetail: View {
                         Text(curve.name)
                     }
                 }
-                HStack {
-                    Text("delay")
-                    Spacer()
-                    TextField("value", text: Binding(
-                        get: { "\(self.context.delay)" },
-                        set: { self.context.delay = TimeInterval(truncating: NumberFormatter().number(from: $0) ?? 0) }
-                    ))
-                    .multilineTextAlignment(.trailing)
-                }
-                HStack {
-                    Text("duration")
-                    Spacer()
-                    TextField("value", text: Binding(
-                        get: { "\(self.context.duration)" },
-                        set: { self.context.duration = TimeInterval(truncating: NumberFormatter().number(from: $0) ?? 0) }
-                    ))
-                    .multilineTextAlignment(.trailing)
-                }
-                HStack {
-                    Text("damping")
-                    Spacer()
-                    TextField("value", text: Binding(
-                        get: { "\(self.context.damping)" },
-                        set: { self.context.damping = CGFloat(truncating: NumberFormatter().number(from: $0) ?? 0) }
-                    ))
-                    .multilineTextAlignment(.trailing)
-                }
-                HStack {
-                    Text("velocity")
-                    Spacer()
-                    TextField("value", text: Binding(
-                        get: { "\(self.context.velocity)" },
-                        set: { self.context.velocity = CGFloat(truncating: NumberFormatter().number(from: $0) ?? 0) }
-                    ))
-                    .multilineTextAlignment(.trailing)
-                }
-                VStack {
-                    Text("repeatCount")
-                    Stepper(value: $context.repeatCount, in: -1...Float.greatestFiniteMagnitude, step: 1.0) {
-                        Text("\(Int(context.repeatCount))")
-                    }
+                InputTextField(label: "delay", value: Binding(
+                    get: { "\(self.context.delay)" },
+                    set: { self.context.delay = TimeInterval(truncating: NumberFormatter().number(from: $0) ?? 0) }
+                ))
+                InputTextField(label: "duration", value: Binding(
+                    get: { "\(self.context.duration)" },
+                    set: { self.context.duration = TimeInterval(truncating: NumberFormatter().number(from: $0) ?? 0) }
+                ))
+                InputTextField(label: "damping", value: Binding(
+                    get: { "\(self.context.damping)" },
+                    set: { self.context.damping = CGFloat(truncating: NumberFormatter().number(from: $0) ?? 0) }
+                ))
+                InputTextField(label: "velocity", value: Binding(
+                    get: { "\(self.context.velocity)" },
+                    set: { self.context.velocity = CGFloat(truncating: NumberFormatter().number(from: $0) ?? 0) }
+                ))
+                Stepper(value: $context.repeatCount, in: -1...Float.greatestFiniteMagnitude, step: 1.0) {
+                    Text("repeatCount: \(Int(context.repeatCount))")
                 }
             }
             

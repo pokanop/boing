@@ -29,6 +29,7 @@ struct ContentView: View {
                         ForEach(animationsStore.animations.indexed(), id: \.1.id) { index, context in
                             NavigationLink(destination: AnimationDetail(context: self.$animationsStore.animations[index])) {
                                 Text(context.title)
+                                    .foregroundColor(context.isEmpty ? .red : .black)
                             }
                         }
                         Button(action: add) {
