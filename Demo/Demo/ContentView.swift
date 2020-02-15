@@ -11,7 +11,7 @@ import Boing
 struct ContentView: View {
     
     @ObservedObject var store: AnimationsStore
-    @State var useUIView: Bool = false
+    @State var useUIView: Bool = true
     @State private var needsRefresh: Bool = false
     @State private var isAnimating: Bool = false
     

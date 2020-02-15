@@ -26,7 +26,7 @@ struct HostView: UIViewRepresentable {
             }
             
             var ctx: AnimatingContext?
-            self.store.animations.forEach { animation in
+            self.store.animations.filter { $0.enabled }.forEach { animation in
                 if ctx == nil {
                     ctx = uiView.animate(animations: animation.animatingTypes, options: animation.animatingOptions, completion: { completion(animation) })
                 } else {

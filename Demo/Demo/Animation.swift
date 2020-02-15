@@ -93,6 +93,7 @@ class AnimationContext: ObservableObject, Identifiable, Equatable {
     @Published var velocity: CGFloat = 0.7
     @Published var repeatCount: Float = 1.0
     @Published var autoreverse: Bool = false
+    @Published var enabled: Bool = true
     
     var title: String {
         if animations.count > 0 {
