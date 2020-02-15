@@ -53,9 +53,9 @@ struct AnimationDetail: View {
                 }
             }
             
-            ForEach(context.animations.filter({ $0.associatedProperty != .none }).indexed(), id: \.1.id) { index, animation in
+            ForEach(context.animations.filter({ $0.associatedProperty != .none })) { animation in
                 Section(header: Text(animation.name)) {
-                    AnimationProperties(animation: self.$context.animations[index])
+                    AnimationProperties(animation: animation)
                 }
             }
         }
@@ -66,9 +66,7 @@ struct AnimationDetail: View {
 }
 
 struct AnimationDetail_Previews: PreviewProvider {
-    @State static var context = AnimationContext()
-    
     static var previews: some View {
-        return AnimationDetail(context: AnimationDetail_Previews.context)
+        return AnimationDetail(context: AnimationContext())
     }
 }

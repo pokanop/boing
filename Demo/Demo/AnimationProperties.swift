@@ -10,7 +10,7 @@ import Boing
 
 struct AnimationProperties: View {
     
-    @Binding var animation: AnimationType
+    @ObservedObject var animation: AnimationType
     
     var body: some View {
         Group {
@@ -98,9 +98,7 @@ struct AnimationProperties: View {
 }
 
 struct AnimationProperties_Previews: PreviewProvider {
-    @State static var animation: AnimationType = AnimationType()
-    
     static var previews: some View {
-        AnimationProperties(animation: AnimationProperties_Previews.$animation)
+        AnimationProperties(animation: AnimationType())
     }
 }

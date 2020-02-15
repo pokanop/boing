@@ -58,12 +58,6 @@ class AnimationType: ObservableObject, Identifiable, CaseIterable, Hashable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(type)
-        hasher.combine(alpha)
-        hasher.combine(angle)
-        hasher.combine("\(point)")
-        hasher.combine("\(rect)")
-        hasher.combine(color)
-        hasher.combine(interval)
     }
     
 }
