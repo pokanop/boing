@@ -81,7 +81,12 @@ class AnimationContext: ObservableObject, Identifiable {
     @Published var autoreverse: Bool = false
     
     var title: String {
-        animations.count > 0 ? animations.map { $0.type.name }.joined(separator: ", ") : "configure"
+        if animations.count > 0 {
+            let names = animations.map { $0.type.name }
+            return names.count > 3 ? "\(names.count) animations" : names.joined(separator: ", ")
+        } else {
+            return "configure"
+        }
     }
     
     var isEmpty: Bool {
