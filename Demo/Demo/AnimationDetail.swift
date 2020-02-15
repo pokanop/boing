@@ -10,12 +10,14 @@ import Boing
 
 struct AnimationDetail: View {
     
-    @Binding var context: AnimationContext
+    @ObservedObject var context: AnimationContext
     
     var body: some View {
         Form {
             Section(header: Text("Types")) {
-                NavigationLink(destination: MultiSelectList(items: AnimationType.allCases, selections: $context.animations)) {
+                NavigationLink(destination: MultiSelectList(items: AnimationType.allCases, selections: context.animations) { selections in
+                    self.context.animations = selections
+                }) {
                     Text(context.title)
                         .foregroundColor(context.isEmpty ? .red : .black)
                 }
@@ -67,6 +69,6 @@ struct AnimationDetail_Previews: PreviewProvider {
     @State static var context = AnimationContext()
     
     static var previews: some View {
-        return AnimationDetail(context: AnimationDetail_Previews.$context)
+        return AnimationDetail(context: AnimationDetail_Previews.context)
     }
 }

@@ -11,13 +11,12 @@ struct MultiSelectListRow: View {
     
     var title: String
     @Binding var isSelected: Bool
-    @State var refresh: Bool = false
 
     var body: some View {
         Button(action: toggle) {
             HStack {
                 Text(title)
-                if isSelected || refresh {
+                if isSelected {
                     Spacer()
                     Image(systemName: "checkmark")
                 }
@@ -27,7 +26,6 @@ struct MultiSelectListRow: View {
     
     private func toggle() {
         isSelected.toggle()
-        refresh = isSelected    // HACK: Forces a redraw since updating Binding fails
     }
     
 }

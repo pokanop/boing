@@ -15,28 +15,33 @@ protocol Selectable: Hashable {
 struct MultiSelectList<T: Selectable>: View {
     
     var items: [T]
-    @Binding var selections: [T]
+    @State var selections: [T] = []
+    var selectAction: ([T]) -> ()
 
     var body: some View {
         List {
-            ForEach(self.items, id: \.self) { item -> MultiSelectListRow in
-                let binding = Binding(
+            ForEach(self.items, id: \.self) { item in
+                MultiSelectListRow(title: item.name, isSelected: Binding(
                     get: { self.selections.contains(item) },
-                    set: { $0 ? self.selections.append(item) : self.selections.removeAll(where: { $0 == item }) }
-                )
-                return MultiSelectListRow(title: item.name, isSelected: binding)
+                    set: { selected in
+                        self.selections.removeAll(where: { $0 == item })
+                        if selected {
+                            self.selections.append(item)
+                        }
+                        self.selectAction(self.selections)
+                    }
+                ))
             }
         }
         .navigationBarTitle("Animation Types", displayMode: .inline)
+        .listStyle(PlainListStyle())
     }
     
 }
 
 struct MultiSelectList_Previews: PreviewProvider {
-    @State static var selections: [String] = []
-    
     static var previews: some View {
-        return MultiSelectList(items: ["Hello", "World"], selections: MultiSelectList_Previews.$selections)
+        return MultiSelectList(items: ["Hello", "World"], selectAction: { _ in })
     }
 }
 

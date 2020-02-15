@@ -12,6 +12,7 @@ struct ContentView: View {
     
     @ObservedObject var animationsStore: AnimationsStore
     @State var useUIView: Bool = false
+    @State private var needsRefresh: Bool = false
     
     var body: some View {
         NavigationView {
@@ -26,16 +27,22 @@ struct ContentView: View {
                     }
                     
                     Section(header: Text("Animations")) {
-                        ForEach(animationsStore.animations.indexed(), id: \.1.id) { index, context in
-                            NavigationLink(destination: AnimationDetail(context: self.$animationsStore.animations[index])) {
-                                Text(context.title)
-                                    .foregroundColor(context.isEmpty ? .red : .black)
+                        ForEach(animationsStore.animations) { context in
+                            if self.needsRefresh || !self.needsRefresh {    // HACK: WTF SwiftUI
+                                NavigationLink(destination: AnimationDetail(context: context)) {
+                                    Text(context.title)
+                                        .foregroundColor(context.isEmpty ? .red : .black)
+                                }
                             }
                         }
                         .onDelete(perform: delete)
+                        
                         Button(action: add) {
                             Text("Add")
                         }
+                    }
+                    .onAppear {
+                        self.needsRefresh.toggle()
                     }
                     
                     Section(header: Text("Actions")) {
