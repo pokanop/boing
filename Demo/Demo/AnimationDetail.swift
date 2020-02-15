@@ -51,7 +51,7 @@ struct AnimationDetail: View {
                 }
             }
             
-            ForEach(context.animations.indexed(), id: \.1.id) { index, animation in
+            ForEach(context.animations.filter({ $0.associatedProperty != .none }).indexed(), id: \.1.id) { index, animation in
                 Section(header: Text(animation.name)) {
                     AnimationProperties(animation: self.$context.animations[index])
                 }
