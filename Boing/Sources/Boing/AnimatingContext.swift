@@ -222,6 +222,10 @@ extension AnimatingContext: Animating {
         add([.backgroundColor(color)], options, completion)
     }
     
+    @discardableResult public func cornerRadius(_ cornerRadius: CGFloat, options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {
+        add([.cornerRadius(cornerRadius)], options, completion)
+    }
+    
     @discardableResult public func alpha(_ alpha: CGFloat, options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {
         add([.alpha(alpha)], options, completion)
     }

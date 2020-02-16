@@ -17,6 +17,7 @@ public protocol Animating {
     @discardableResult func scale(x: CGFloat, y: CGFloat, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
     @discardableResult func rotate(angle: CGFloat, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
     @discardableResult func backgroundColor(_ color: UIColor, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
+    @discardableResult func cornerRadius(_ cornerRadius: CGFloat, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
     @discardableResult func alpha(_ alpha: CGFloat, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
     @discardableResult func frame(_ frame: CGRect, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
     @discardableResult func bounds(_ bounds: CGRect, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext

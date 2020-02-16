@@ -14,6 +14,7 @@ public enum AnimatingType {
     case scale(CGFloat, CGFloat)
     case rotate(CGFloat)
     case backgroundColor(UIColor)
+    case cornerRadius(CGFloat)
     case alpha(CGFloat)
     case frame(CGRect)
     case bounds(CGRect)
@@ -41,7 +42,7 @@ public enum AnimatingType {
     
     var isViewAnimation: Bool {
         switch self {
-        case .translate, .scale, .rotate, .backgroundColor, .alpha, .frame, .bounds, .center, .fadeIn, .fadeOut, .zoomIn, .zoomOut, .slide, .fall: return true
+        case .translate, .scale, .rotate, .backgroundColor, .cornerRadius, .alpha, .frame, .bounds, .center, .fadeIn, .fadeOut, .zoomIn, .zoomOut, .slide, .fall: return true
         case .squeeze(let direction): return direction != .none
         case .shake, .pop, .flip, .morph, .flash, .wobble, .swing, .delay, .boing: return false
         }
@@ -164,7 +165,7 @@ public enum AnimatingType {
                         completion?()
                     }
                 }
-            case .translate, .scale, .rotate, .backgroundColor, .alpha, .frame, .bounds, .center, .slide, .fall:
+            case .translate, .scale, .rotate, .backgroundColor, .cornerRadius, .alpha, .frame, .bounds, .center, .slide, .fall:
                 break
             }
         case .end:
@@ -179,6 +180,8 @@ public enum AnimatingType {
                 context.rotation = angle
             case .backgroundColor(let color):
                 context.target?.backgroundColor = color
+            case .cornerRadius(let cornerRadius):
+                context.target?.layer.cornerRadius = cornerRadius
             case .alpha(let alpha):
                 context.alpha = alpha
             case .frame(let frame):
@@ -224,6 +227,7 @@ extension AnimatingType: Nameable {
         case .scale: return "scale"
         case .rotate: return "rotate"
         case .backgroundColor: return "backgroundColor"
+        case .cornerRadius: return "cornerRadius"
         case .alpha: return "alpha"
         case .frame: return "frame"
         case .bounds: return "bounds"
@@ -252,7 +256,7 @@ extension AnimatingType: Nameable {
 extension AnimatingType: CaseIterable {
     
     public static var allCases: [AnimatingType] {
-        return [.translate(0, 0), .scale(0, 0), .rotate(0), .backgroundColor(.clear), .alpha(0), .frame(.zero), .bounds(.zero), .center(.zero), .fadeIn(.none), .fadeOut(.none), .slide(.none), .squeeze(.none), .zoomIn, .zoomOut, .fall, .shake, .pop, .flip(.none), .morph, .flash, .wobble, .swing, .boing]
+        return [.translate(0, 0), .scale(0, 0), .rotate(0), .backgroundColor(.clear), .cornerRadius(0), .alpha(0), .frame(.zero), .bounds(.zero), .center(.zero), .fadeIn(.none), .fadeOut(.none), .slide(.none), .squeeze(.none), .zoomIn, .zoomOut, .fall, .shake, .pop, .flip(.none), .morph, .flash, .wobble, .swing, .boing]
     }
     
 }
@@ -275,6 +279,8 @@ extension AnimatingType: Hashable {
         case .backgroundColor(let color):
             hasher.combine("backgroundColor")
             hasher.combine(color)
+        case .cornerRadius(let cornerRadius):
+            hasher.combine(cornerRadius)
         case .alpha(let alpha):
             hasher.combine("alpha")
             hasher.combine(alpha)

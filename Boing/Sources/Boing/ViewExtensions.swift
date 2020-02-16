@@ -33,6 +33,10 @@ extension UIView: Animating {
         return AnimatingContext([.backgroundColor(color)], target: self, options: options, completion: completion)
     }
     
+    @discardableResult public func cornerRadius(_ cornerRadius: CGFloat, options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {
+        return AnimatingContext([.cornerRadius(cornerRadius)], target: self, options: options, completion: completion)
+    }
+    
     @discardableResult public func alpha(_ alpha: CGFloat, options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {
         return AnimatingContext([.alpha(alpha)], target: self, options: options, completion: completion)
     }
