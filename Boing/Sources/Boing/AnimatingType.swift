@@ -171,11 +171,9 @@ public enum AnimatingType {
         case .end:
             switch self {
             case .translate(let x, let y):
-                context.translation.x = x
-                context.translation.y = y
+                context.translation = CGPoint(x: x, y: y)
             case .scale(let x, let y):
-                context.scale.x = x
-                context.scale.y = y
+                context.scale = CGPoint(x: x, y: y)
             case .rotate(let angle):
                 context.rotation = angle
             case .backgroundColor(let color):

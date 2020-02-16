@@ -23,9 +23,9 @@ public class AnimatingContext: NSObject {
     var repeatCount: Float = 1.0
     var autoreverse: Bool = false
     
-    var translation: CGPoint = CGPoint(x: 0, y: 0)
-    var scale: CGPoint = CGPoint(x: 1, y: 1)
-    var rotation: CGFloat = 0
+    var translation: CGPoint?
+    var scale: CGPoint?
+    var rotation: CGFloat?
     var alpha: CGFloat?
     
     var options: UIView.AnimationOptions {
@@ -130,10 +130,22 @@ public class AnimatingContext: NSObject {
         if let alpha = alpha {
             target.alpha = alpha
         }
-        let translate = target.transform.translatedBy(x: translation.x, y: translation.y)
-        let translateAndScale = translate.scaledBy(x: self.scale.x, y: self.scale.y)
-        let rotate = CGAffineTransform(rotationAngle: rotation)
-        target.transform = rotate.concatenating(translateAndScale)
+        
+        var transform = target.transform
+        if let translation = translation {
+            transform = transform.translatedBy(x: translation.x, y: translation.y)
+        }
+        
+        if let scale = scale {
+            transform = transform.scaledBy(x: scale.x, y: scale.y)
+        }
+        
+        if let rotation = rotation {
+            let rotate = CGAffineTransform(rotationAngle: rotation)
+            transform = rotate.concatenating(transform)
+        }
+        
+        target.transform = transform
     }
     
     private func applyViewAnimations() {
