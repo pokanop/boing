@@ -8,21 +8,24 @@ Boing is a simple and powerful animation API for views written in Swift. Inspire
 
 ### Cocoapods
 
-To add the pod to your project, update your `Podfile` with this source:
+Update your [`Podfile`](https://cocoapods.org/) with this source:
 ```ruby
 source 'https://github.com/pokanop/cocoapods-pokanop.git'
 ```
 
-And add the pod to your target as well to include:
+Add the pod to your target and run `pod install`:
 ```ruby
 pod 'Boing'
 ```
 
 ### Carthage
 
-## Animations
+Update your [`Cartfile`](https://github.com/Carthage/Carthage) and run `carthage update`:
+```
+github "pokanop/boing"
+```
 
-## API
+## Animations
 
 The basic API pattern adds extensions to any `UIView` allowing you to execute simple commands to animate your views.
 
@@ -41,7 +44,7 @@ You can customize any of the animations and provide a completion handler simply 
 ```swift
 view.boing(options: [.duration(0.3)]) {
   // add your completion code
-}
+}.commit()
 ```
 
 The available options include:
@@ -94,7 +97,7 @@ You can run combined animations using the `animate()` method as follows:
 view.animate(
   animations: [.boing, .backgroundColor(.blue)],
   options: [.duration(0.5), .curve(.easeInOut)]
-)
+).commit()
 ```
 
 ### Chainable Animations
