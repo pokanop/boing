@@ -7,6 +7,14 @@
 
 import UIKit
 
+/// The core animation types available to perform.
+///
+/// Each animation type may have associated values that
+/// define how the animation will execute. These are relevant
+/// to the specific animation type.
+///
+/// - Note: Some animations may conflict with others and
+///         may have undefined behavior.
 public enum AnimatingType {
     
     // Basic

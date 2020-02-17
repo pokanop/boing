@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// The curve to use in `AnimatingType` values.
 public enum AnimatingCurve: CaseIterable {
     
     case linear, easeIn, easeOut, easeInOut
@@ -52,6 +53,7 @@ extension AnimatingCurve: Hashable {
 
 extension AnimatingCurve: Nameable {
     
+    /// The name of the curve.
     public var name: String {
         switch self {
         case .easeIn: return "easeIn"

@@ -7,6 +7,16 @@
 
 import UIKit
 
+/// An `AnimatingContext` is a context used for executing one or more
+/// animations.
+///
+/// It is the main object used to start an animation through the
+/// `commit` call. The context can be safely ignored in the middle of
+/// sequences and provides a buidler pattern to add more animations.
+///
+/// Typically, you won't explicitly create an `AnimatingContext`
+/// and is usually generated as a side effect of calling `Animating` methods
+/// to perfom animations.
 public class AnimatingContext: NSObject {
     
     var animations: [AnimatingType] = []
@@ -99,6 +109,14 @@ public class AnimatingContext: NSObject {
         self.completion = completion
     }
     
+    /// The main method on `AnimatingContext` used to execute underlying
+    /// animations.
+    ///
+    /// This should be called on the final context in a sequence but can be called anywhere as it
+    /// will trace to the front of the list and start performing animations from there.
+    ///
+    /// - Note: This **must** be called at the end of an animation sequence or the animations
+    /// will not be executed.
     public func commit() {
         target?.isUserInteractionEnabled = false
         first?.animate()

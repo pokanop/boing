@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// The direction to use in `AnimatingType` values.
 public enum AnimatingDirection: String, CaseIterable {
     
     case none, up, down, left, right
@@ -48,6 +49,7 @@ public enum AnimatingDirection: String, CaseIterable {
 
 extension AnimatingDirection: Nameable {
     
+    /// The name of the direction.
     public var name: String {
         rawValue
     }

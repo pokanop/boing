@@ -7,6 +7,16 @@
 
 import UIKit
 
+/// Animating options used in an `AnimatingContext`.
+///
+/// The options are used for any coalesced set of animations that
+/// are contained in an `AnimatingContext`. For example, for
+/// an `animate` call that combines several animations, they all
+/// will share the same `duration` or `delay` and it will apply
+/// to the entire context.
+///
+/// Multiple contexts will have their own options and apply only to
+/// that execution of the animation.
 public enum AnimatingOption: CaseIterable {
     
     case delay(TimeInterval)
@@ -26,6 +36,7 @@ public enum AnimatingOption: CaseIterable {
 
 extension AnimatingOption: Nameable {
     
+    /// The name of the option.
     public var name: String {
         switch self {
         case .delay: return "delay"

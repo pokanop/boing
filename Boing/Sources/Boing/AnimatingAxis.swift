@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// The axis to use in `AnimatingType` values.
 public enum AnimatingAxis: String, CaseIterable {
     
     case horizontal
@@ -16,6 +17,7 @@ public enum AnimatingAxis: String, CaseIterable {
 
 extension AnimatingAxis: Nameable {
     
+    /// The name of the axis.
     public var name: String {
         rawValue
     }
