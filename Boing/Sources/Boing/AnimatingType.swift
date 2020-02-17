@@ -62,7 +62,6 @@ public enum AnimatingType {
             case .borderColor(let color):
                 let animation = CABasicAnimation()
                 animation.keyPath = "borderColor"
-                animation.fromValue = context.target?.layer.borderColor
                 animation.toValue = color.cgColor
                 if !context.removeOnCompletion {
                     context.target?.layer.borderColor = color.cgColor
@@ -71,7 +70,6 @@ public enum AnimatingType {
             case .borderWidth(let width):
                 let animation = CABasicAnimation()
                 animation.keyPath = "borderWidth"
-                animation.fromValue = context.target?.layer.borderWidth
                 animation.toValue = width
                 if !context.removeOnCompletion {
                     context.target?.layer.borderWidth = width
