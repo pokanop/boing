@@ -13,6 +13,12 @@ class SquareView: UIView {
         super.init(frame: .zero)
         
         backgroundColor = .black
+        
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            heightAnchor.constraint(equalTo: widthAnchor),
+            heightAnchor.constraint(greaterThanOrEqualToConstant: 200)
+        ])
     }
     
     required init?(coder: NSCoder) {

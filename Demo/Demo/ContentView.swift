@@ -19,11 +19,7 @@ struct ContentView: View {
         NavigationView {
             VStack {
                 if useUIView {
-                    GeometryReader { geometry in
-                        HostView(isAnimating: self.$isAnimating, store: self.store)
-                            .padding(40)
-                            .frame(width: geometry.size.height, height: geometry.size.height)
-                    }
+                    HostView(isAnimating: self.$isAnimating, store: self.store)
                 } else {
                     CircleView()
                 }

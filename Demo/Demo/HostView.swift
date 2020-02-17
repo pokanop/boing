@@ -13,11 +13,11 @@ struct HostView: UIViewRepresentable {
     @Binding var isAnimating: Bool
     @ObservedObject var store: AnimationsStore
     
-    func makeUIView(context: UIViewRepresentableContext<HostView>) -> SquareView {
-        return SquareView()
+    func makeUIView(context: UIViewRepresentableContext<HostView>) -> SquareContainerView {
+        return SquareContainerView()
     }
     
-    func updateUIView(_ uiView: SquareView, context: UIViewRepresentableContext<HostView>) {
+    func updateUIView(_ uiView: SquareContainerView, context: UIViewRepresentableContext<HostView>) {
         if isAnimating {
             let completion = { (animation: AnimationContext) in
                 if animation == self.store.animations.last! {
@@ -28,7 +28,7 @@ struct HostView: UIViewRepresentable {
             var ctx: AnimatingContext?
             self.store.animations.filter { $0.enabled }.forEach { animation in
                 if ctx == nil {
-                    ctx = uiView.animate(animations: animation.animatingTypes, options: animation.animatingOptions, completion: { completion(animation) })
+                    ctx = uiView.squareView.animate(animations: animation.animatingTypes, options: animation.animatingOptions, completion: { completion(animation) })
                 } else {
                     ctx = ctx?.animate(
                         animations: animation.animatingTypes,
