@@ -49,9 +49,9 @@ public enum AnimatingType {
     
     var isViewAnimation: Bool {
         switch self {
-        case .translate, .scale, .rotate, .backgroundColor, .cornerRadius, .alpha, .frame, .bounds, .center, .size, .borderColor, .borderWidth, .shadowColor, .shadowOffset, .shadowOpacity, .shadowRadius, .fadeIn, .fadeOut, .zoomIn, .zoomOut, .slide, .fall: return true
+        case .translate, .scale, .rotate, .backgroundColor, .cornerRadius, .alpha, .frame, .bounds, .center, .size, .shadowColor, .shadowOffset, .shadowOpacity, .shadowRadius, .fadeIn, .fadeOut, .zoomIn, .zoomOut, .slide, .fall: return true
         case .squeeze(let direction): return direction != .none
-        case .shake, .pop, .flip, .morph, .flash, .wobble, .swing, .delay, .boing: return false
+        case .borderColor, .borderWidth, .shake, .pop, .flip, .morph, .flash, .wobble, .swing, .delay, .boing: return false
         }
     }
     
@@ -59,6 +59,33 @@ public enum AnimatingType {
         switch position {
         case .start:
             switch self {
+            case .borderColor(let color):
+                let animation = CABasicAnimation()
+                animation.keyPath = "borderColor"
+                animation.fromValue = context.target?.layer.borderColor
+                animation.toValue = color.cgColor
+                if !context.removeOnCompletion {
+                    context.target?.layer.borderColor = color.cgColor
+                }
+                context.layerAnimations.append(animation)
+            case .borderWidth(let width):
+                let animation = CABasicAnimation()
+                animation.keyPath = "borderWidth"
+                animation.fromValue = context.target?.layer.borderWidth
+                animation.toValue = width
+                if !context.removeOnCompletion {
+                    context.target?.layer.borderWidth = width
+                }
+                context.layerAnimations.append(animation)
+            case .shadowColor(let color):
+                let animation = CABasicAnimation()
+                animation.keyPath = "shadowColor"
+                animation.fromValue = context.target?.layer.shadowColor
+                animation.toValue = color.cgColor
+                if !context.removeOnCompletion {
+                    context.target?.layer.shadowColor = color.cgColor
+                }
+                context.layerAnimations.append(animation)
             case .fadeIn(let direction):
                 context.alpha = 0.0
                 context.translation = direction.translation
@@ -172,7 +199,7 @@ public enum AnimatingType {
                         completion?()
                     }
                 }
-            case .translate, .scale, .rotate, .backgroundColor, .cornerRadius, .alpha, .frame, .bounds, .center, .size, .borderColor, .borderWidth, .shadowColor, .shadowOffset, .shadowOpacity, .shadowRadius, .slide, .fall:
+            case .translate, .scale, .rotate, .backgroundColor, .cornerRadius, .alpha, .frame, .bounds, .center, .size, .shadowOffset, .shadowOpacity, .shadowRadius, .slide, .fall:
                 break
             }
         case .end:
@@ -198,12 +225,6 @@ public enum AnimatingType {
             case .size(let size):
                 guard let origin = context.target?.frame.origin else { return }
                 context.target?.frame = CGRect(origin: origin, size: size)
-            case .borderColor(let color):
-                context.target?.layer.borderColor = color.cgColor
-            case .borderWidth(let width):
-                context.target?.layer.borderWidth = width
-            case .shadowColor(let color):
-                context.target?.layer.shadowColor = color.cgColor
             case .shadowOffset(let offset):
                 context.target?.layer.shadowOffset = offset
             case .shadowOpacity(let opacity):
@@ -231,7 +252,7 @@ public enum AnimatingType {
             case .fall:
                 context.translation = CGPoint(x: 0, y: 400)
                 context.rotation = 45 * (CGFloat.pi / 180)
-            case .shake, .pop, .flip, .morph, .flash, .wobble, .swing, .delay, .boing:
+            case .borderColor, .borderWidth, .shadowColor, .shake, .pop, .flip, .morph, .flash, .wobble, .swing, .delay, .boing:
                 break
             }
         }

@@ -261,6 +261,34 @@ extension AnimatingContext: Animating {
         add([.center(center)], options, completion)
     }
     
+    @discardableResult public func size(_ size: CGSize, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        add([.size(size)], options, completion)
+    }
+    
+    @discardableResult public func borderColor(_ color: UIColor, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        add([.borderColor(color)], options, completion)
+    }
+    
+    @discardableResult public func borderWidth(_ width: CGFloat, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        add([.borderWidth(width)], options, completion)
+    }
+    
+    @discardableResult public func shadowColor(_ color: UIColor, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        add([.shadowColor(color)], options, completion)
+    }
+    
+    @discardableResult public func shadowOffset(_ offset: CGSize, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        add([.shadowOffset(offset)], options, completion)
+    }
+    
+    @discardableResult public func shadowOpacity(_ opacity: CGFloat, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        add([.shadowOpacity(opacity)], options, completion)
+    }
+    
+    @discardableResult public func shadowRadius(_ radius: CGFloat, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        add([.shadowRadius(radius)], options, completion)
+    }
+    
     @discardableResult public func fadeIn(direction: AnimatingDirection = .none, options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {
         add([.fadeIn(direction)], options, completion)
     }

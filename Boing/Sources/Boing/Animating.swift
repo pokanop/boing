@@ -22,6 +22,13 @@ public protocol Animating {
     @discardableResult func frame(_ frame: CGRect, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
     @discardableResult func bounds(_ bounds: CGRect, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
     @discardableResult func center(_ center: CGPoint, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
+    @discardableResult func size(_ size: CGSize, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
+    @discardableResult func borderColor(_ color: UIColor, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
+    @discardableResult func borderWidth(_ width: CGFloat, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
+    @discardableResult func shadowColor(_ color: UIColor, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
+    @discardableResult func shadowOffset(_ offset: CGSize, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
+    @discardableResult func shadowOpacity(_ opacity: CGFloat, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
+    @discardableResult func shadowRadius(_ radius: CGFloat, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
     
     // Preset animations
     @discardableResult func fadeIn(direction: AnimatingDirection, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext

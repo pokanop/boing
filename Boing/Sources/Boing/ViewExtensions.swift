@@ -53,6 +53,34 @@ extension UIView: Animating {
         return AnimatingContext([.center(center)], target: self, options: options, completion: completion)
     }
     
+    @discardableResult public func size(_ size: CGSize, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        return AnimatingContext([.size(size)], target: self, options: options, completion: completion)
+    }
+    
+    @discardableResult public func borderColor(_ color: UIColor, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        return AnimatingContext([.borderColor(color)], target: self, options: options, completion: completion)
+    }
+    
+    @discardableResult public func borderWidth(_ width: CGFloat, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        return AnimatingContext([.borderWidth(width)], target: self, options: options, completion: completion)
+    }
+    
+    @discardableResult public func shadowColor(_ color: UIColor, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        return AnimatingContext([.shadowColor(color)], target: self, options: options, completion: completion)
+    }
+    
+    @discardableResult public func shadowOffset(_ offset: CGSize, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        return AnimatingContext([.shadowOffset(offset)], target: self, options: options, completion: completion)
+    }
+    
+    @discardableResult public func shadowOpacity(_ opacity: CGFloat, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        return AnimatingContext([.shadowOpacity(opacity)], target: self, options: options, completion: completion)
+    }
+    
+    @discardableResult public func shadowRadius(_ radius: CGFloat, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        return AnimatingContext([.shadowRadius(radius)], target: self, options: options, completion: completion)
+    }
+    
     @discardableResult public func fadeIn(direction: AnimatingDirection = .none, options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {
         return AnimatingContext([.fadeIn(direction)], target: self, options: options, completion: completion)
     }
