@@ -1,5 +1,8 @@
 ![Boing](Images/boing.png)
 
+[![Build Status](https://travis-ci.org/pokanop/boing.svg?branch=master)](https://travis-ci.org/pokanop/boing)
+[![License](https://img.shields.io/cocoapods/l/SnapLayout.svg?style=flat)](https://github.com/pokanop/boing/blob/master/LICENSE)
+
 Boing is a simple and powerful animation API for views written in Swift. Inspired by many other animation libraries out there, it tries to aggregate and simplify many options into a single and seamless integration that can be reused in any project.
 
 ## Installation
