@@ -16,9 +16,10 @@ public enum AnimatingOption: CaseIterable {
     case velocity(CGFloat)
     case repeatCount(Float)
     case autoreverse(Bool)
+    case removeOnCompletion(Bool)
     
     public static var allCases: [AnimatingOption] {
-        return [.delay(0), .duration(0), .curve(.easeInOut), .damping(0), .velocity(0), .repeatCount(0), .autoreverse(false)]
+        return [.delay(0), .duration(0), .curve(.easeInOut), .damping(0), .velocity(0), .repeatCount(0), .autoreverse(false), .removeOnCompletion(true)]
     }
     
 }
@@ -34,6 +35,7 @@ extension AnimatingOption: Nameable {
         case .velocity: return "velocity"
         case .repeatCount: return "repeatCount"
         case .autoreverse: return "autoreverse"
+        case .removeOnCompletion: return "removeOnCompletion"
         }
     }
     

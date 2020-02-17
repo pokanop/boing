@@ -22,6 +22,7 @@ public class AnimatingContext: NSObject {
     var velocity: CGFloat = 0.7
     var repeatCount: Float = 1.0
     var autoreverse: Bool = false
+    var removeOnCompletion: Bool = true
     
     var translation: CGPoint?
     var scale: CGPoint?
@@ -92,6 +93,7 @@ public class AnimatingContext: NSObject {
             case .repeatCount(let repeatCount): self.repeatCount = repeatCount
             case .autoreverse(let autoreverse): self.autoreverse = autoreverse
             case .velocity(let velocity): self.velocity = velocity
+            case .removeOnCompletion(let removeOnCompletion): self.removeOnCompletion = removeOnCompletion
             }
         }
         self.completion = completion
@@ -107,9 +109,13 @@ public class AnimatingContext: NSObject {
         
         completion?()
         next?.animate()
+        
+        // Last animation
         if self.next == nil {
-            target.transform = .identity
-            target.layer.transform = CATransform3DIdentity
+            if removeOnCompletion {
+                target.transform = .identity
+                target.layer.transform = CATransform3DIdentity
+            }
             target.isUserInteractionEnabled = true
         }
     }
@@ -178,6 +184,7 @@ public class AnimatingContext: NSObject {
         group.timingFunction = curve.asTimingFunction()
         group.repeatCount = repeatCount
         group.autoreverses = autoreverse
+        group.isRemovedOnCompletion = removeOnCompletion
         group.beginTime = CACurrentMediaTime() + CFTimeInterval(delay)
         group.delegate = self
         

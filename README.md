@@ -56,6 +56,7 @@ damping(CGFloat)
 velocity(CGFloat)
 repeatCount(Float)
 autoreverse(Bool)
+removeOnCompletion(Bool)
 ```
 
 ### Animation Types
