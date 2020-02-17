@@ -1,7 +1,9 @@
-![Boing](Images/boing.png)
+# [![Boing](https://github.com/pokanop/Boing/blob/master/Images/boing.png?raw=true)](#)
 
 [![Build Status](https://travis-ci.org/pokanop/boing.svg?branch=master)](https://travis-ci.org/pokanop/boing)
-[![License](https://img.shields.io/cocoapods/l/SnapLayout.svg?style=flat)](https://github.com/pokanop/boing/blob/master/LICENSE)
+[![Version](https://img.shields.io/cocoapods/v/Boing.svg?style=flat)](http://cocoapods.org/pods/Boing)
+[![Platform](https://img.shields.io/cocoapods/p/Boing.svg?style=flat)](http://cocoapods.org/pods/Boing)
+[![License](https://img.shields.io/cocoapods/l/Boing.svg?style=flat)](https://github.com/pokanop/boing/blob/master/LICENSE)
 
 Boing is a simple and powerful animation API for views written in Swift. Inspired by many other animation libraries out there, it tries to aggregate and simplify many options into a single and seamless integration that can be reused in any project.
 
@@ -11,18 +13,12 @@ Boing is a simple and powerful animation API for views written in Swift. Inspire
 
 ### Cocoapods
 
-Update your [`Podfile`](https://cocoapods.org/) with this source:
-```ruby
-source 'https://github.com/pokanop/cocoapods-pokanop.git'
-```
-
-Add the pod to your target and run `pod install`:
+Update your [`Podfile`](https://cocoapods.org/) and run `pod install`:
 ```ruby
 pod 'Boing'
 ```
 
 ### Carthage
-
 Update your [`Cartfile`](https://github.com/Carthage/Carthage) and run `carthage update`:
 ```
 github "pokanop/boing"

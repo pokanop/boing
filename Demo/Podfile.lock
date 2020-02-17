@@ -1,16 +1,16 @@
 PODS:
-  - Boing (0.4.3)
+  - Boing (0.4.4)
 
 DEPENDENCIES:
   - Boing
 
 SPEC REPOS:
-  https://github.com/pokanop/cocoapods-pokanop.git:
+  trunk:
     - Boing
 
 SPEC CHECKSUMS:
-  Boing: 50fd957176d0aa88112bdaedc76fbebb84cb0286
+  Boing: 7bccf3466e3cef9d33155385aca99822e3e0935b
 
-PODFILE CHECKSUM: 052e301507bacbe82dc84fde721a4f6afe4632fc
+PODFILE CHECKSUM: 234002ed9c3ce1d6b297755590b9e1cd0562cae5
 
 COCOAPODS: 1.8.4
