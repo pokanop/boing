@@ -9,16 +9,16 @@ import SwiftUI
 import Boing
 
 enum AnimationTypeProperty {
-    case none, direction, alpha, angle, point, rect, color, interval
+    case none, direction, float, point, size, rect, color, interval
 }
 
 class AnimationType: ObservableObject, Identifiable, CaseIterable, Hashable {
     
     @Published var type: AnimatingType = .boing
     @Published var direction: AnimatingDirection = .none
-    @Published var alpha: CGFloat = 0
-    @Published var angle: CGFloat = 0
+    @Published var float: CGFloat = 0
     @Published var point: CGPoint = .zero
+    @Published var size: CGSize = .zero
     @Published var rect: CGRect = .zero
     @Published var color: Color = .black
     @Published var interval: TimeInterval = 0
@@ -38,9 +38,9 @@ class AnimationType: ObservableObject, Identifiable, CaseIterable, Hashable {
     var associatedProperty: AnimationTypeProperty {
         switch type {
         case .translate, .scale, .center: return .point
-        case .rotate: return .angle
-        case .backgroundColor: return .color
-        case .alpha: return .alpha
+        case .size, .shadowOffset: return .size
+        case .rotate, .alpha, .cornerRadius, .borderWidth, .shadowOpacity, .shadowRadius: return .float
+        case .backgroundColor, .borderColor, .shadowColor: return .color
         case .frame, .bounds: return .rect
         case .fadeIn, .fadeOut, .slide, .squeeze, .flip: return .direction
         case .delay: return .interval
@@ -53,9 +53,10 @@ class AnimationType: ObservableObject, Identifiable, CaseIterable, Hashable {
         case .translate: return .translate(point.x, point.y)
         case .scale: return .scale(point.x, point.y)
         case .center: return .center(point)
-        case .rotate: return .rotate(angle)
+        case .rotate: return .rotate(float)
         case .backgroundColor: return .backgroundColor(color.uiColor)
-        case .alpha: return .alpha(alpha)
+        case .cornerRadius: return .cornerRadius(float)
+        case .alpha: return .alpha(float)
         case .frame: return .frame(rect)
         case .bounds: return .bounds(rect)
         case .fadeIn: return .fadeIn(direction)
@@ -64,6 +65,13 @@ class AnimationType: ObservableObject, Identifiable, CaseIterable, Hashable {
         case .squeeze: return .squeeze(direction)
         case .flip: return .flip(direction)
         case .delay: return .delay(interval)
+        case .size: return .size(size)
+        case .borderColor: return .borderColor(color.uiColor)
+        case .borderWidth: return .borderWidth(float)
+        case .shadowColor: return .shadowColor(color.uiColor)
+        case .shadowOffset: return .shadowOffset(size)
+        case .shadowOpacity: return .shadowOpacity(float)
+        case .shadowRadius: return .shadowRadius(float)
         case .zoomIn, .zoomOut, .fall, .shake, .pop, .morph, .flash, .wobble, .swing, .boing: return type
         }
     }
@@ -93,6 +101,7 @@ class AnimationContext: ObservableObject, Identifiable, Equatable {
     @Published var velocity: CGFloat = 0.7
     @Published var repeatCount: Float = 1.0
     @Published var autoreverse: Bool = false
+    @Published var removeOnCompletion: Bool = true
     @Published var enabled: Bool = true
     
     var title: String {
@@ -113,7 +122,7 @@ class AnimationContext: ObservableObject, Identifiable, Equatable {
     }
     
     var animatingOptions: [AnimatingOption] {
-        return [.delay(delay), .duration(duration), .curve(curve), .damping(damping), .velocity(velocity), .repeatCount(repeatCount), .autoreverse(autoreverse)]
+        return [.delay(delay), .duration(duration), .curve(curve), .damping(damping), .velocity(velocity), .repeatCount(repeatCount), .autoreverse(autoreverse), .removeOnCompletion(removeOnCompletion)]
     }
     
     static func == (lhs: AnimationContext, rhs: AnimationContext) -> Bool {

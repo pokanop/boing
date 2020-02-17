@@ -56,6 +56,9 @@ struct AnimationDetail: View {
                     Stepper(value: $context.repeatCount, in: -1...Float.greatestFiniteMagnitude, step: 1.0) {
                         Text("repeatCount: \(Int(context.repeatCount))")
                     }
+                    Toggle(isOn: $context.removeOnCompletion) {
+                        Text("removeOnCompletion")
+                    }
                 }
                 
                 ForEach(context.animations.filter({ $0.associatedProperty != .none })) { animation in

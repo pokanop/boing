@@ -14,15 +14,10 @@ struct AnimationProperties: View {
     
     var body: some View {
         Group {
-            if animation.associatedProperty == .alpha {
-                InputTextField(label: "alpha", value: Binding(
-                    get: { "\(self.animation.alpha)" },
-                    set: { self.animation.alpha = CGFloat(truncating: NumberFormatter().number(from: $0) ?? 0) }
-                ))
-            } else if animation.associatedProperty == .angle {
-                InputTextField(label: "angle", value: Binding(
-                    get: { "\(self.animation.angle)" },
-                    set: { self.animation.angle = CGFloat(truncating: NumberFormatter().number(from: $0) ?? 0) }
+            if animation.associatedProperty == .float {
+                InputTextField(label: "float", value: Binding(
+                    get: { "\(self.animation.float)" },
+                    set: { self.animation.float = CGFloat(truncating: NumberFormatter().number(from: $0) ?? 0) }
                 ))
             } else if animation.associatedProperty == .direction {
                 Picker(selection: $animation.direction, label: Text("direction")) {
@@ -43,6 +38,21 @@ struct AnimationProperties: View {
                     set: { self.animation.point = CGPoint(
                         x: self.animation.point.x,
                         y: CGFloat(truncating: NumberFormatter().number(from: $0) ?? 0))
+                    }
+                ))
+            } else if animation.associatedProperty == .size {
+                InputTextField(label: "width", value: Binding(
+                    get: { "\(self.animation.size.width)" },
+                    set: { self.animation.size = CGSize(
+                        width: CGFloat(truncating: NumberFormatter().number(from: $0) ?? 0),
+                        height: self.animation.size.height)
+                    }
+                ))
+                InputTextField(label: "height", value: Binding(
+                    get: { "\(self.animation.size.height)" },
+                    set: { self.animation.size = CGSize(
+                        width: self.animation.size.height,
+                        height: CGFloat(truncating: NumberFormatter().number(from: $0) ?? 0))
                     }
                 ))
             } else if animation.associatedProperty == .rect {
