@@ -93,7 +93,7 @@ public class AnimatingContext: NSObject {
             case .repeatCount(let repeatCount): self.repeatCount = repeatCount
             case .autoreverse(let autoreverse): self.autoreverse = autoreverse
             case .velocity(let velocity): self.velocity = velocity
-            case .removeOnCompletion(let removeOnCompletion): self.removeOnCompletion = removeOnCompletion
+            case .removeOnCompletion(let remove): self.removeOnCompletion = remove
             }
         }
         self.completion = completion

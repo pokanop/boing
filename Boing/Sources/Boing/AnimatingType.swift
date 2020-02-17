@@ -19,6 +19,13 @@ public enum AnimatingType {
     case frame(CGRect)
     case bounds(CGRect)
     case center(CGPoint)
+    case size(CGSize)
+    case borderColor(UIColor)
+    case borderWidth(CGFloat)
+    case shadowColor(UIColor)
+    case shadowOffset(CGSize)
+    case shadowOpacity(CGFloat)
+    case shadowRadius(CGFloat)
     
     // Presets
     case fadeIn(AnimatingDirection)
@@ -42,7 +49,7 @@ public enum AnimatingType {
     
     var isViewAnimation: Bool {
         switch self {
-        case .translate, .scale, .rotate, .backgroundColor, .cornerRadius, .alpha, .frame, .bounds, .center, .fadeIn, .fadeOut, .zoomIn, .zoomOut, .slide, .fall: return true
+        case .translate, .scale, .rotate, .backgroundColor, .cornerRadius, .alpha, .frame, .bounds, .center, .size, .borderColor, .borderWidth, .shadowColor, .shadowOffset, .shadowOpacity, .shadowRadius, .fadeIn, .fadeOut, .zoomIn, .zoomOut, .slide, .fall: return true
         case .squeeze(let direction): return direction != .none
         case .shake, .pop, .flip, .morph, .flash, .wobble, .swing, .delay, .boing: return false
         }
@@ -165,7 +172,7 @@ public enum AnimatingType {
                         completion?()
                     }
                 }
-            case .translate, .scale, .rotate, .backgroundColor, .cornerRadius, .alpha, .frame, .bounds, .center, .slide, .fall:
+            case .translate, .scale, .rotate, .backgroundColor, .cornerRadius, .alpha, .frame, .bounds, .center, .size, .borderColor, .borderWidth, .shadowColor, .shadowOffset, .shadowOpacity, .shadowRadius, .slide, .fall:
                 break
             }
         case .end:
@@ -178,8 +185,8 @@ public enum AnimatingType {
                 context.rotation = angle
             case .backgroundColor(let color):
                 context.target?.backgroundColor = color
-            case .cornerRadius(let cornerRadius):
-                context.target?.layer.cornerRadius = cornerRadius
+            case .cornerRadius(let radius):
+                context.target?.layer.cornerRadius = radius
             case .alpha(let alpha):
                 context.alpha = alpha
             case .frame(let frame):
@@ -188,6 +195,21 @@ public enum AnimatingType {
                 context.target?.bounds = bounds
             case .center(let center):
                 context.target?.center = center
+            case .size(let size):
+                guard let origin = context.target?.frame.origin else { return }
+                context.target?.frame = CGRect(origin: origin, size: size)
+            case .borderColor(let color):
+                context.target?.layer.borderColor = color.cgColor
+            case .borderWidth(let width):
+                context.target?.layer.borderWidth = width
+            case .shadowColor(let color):
+                context.target?.layer.shadowColor = color.cgColor
+            case .shadowOffset(let offset):
+                context.target?.layer.shadowOffset = offset
+            case .shadowOpacity(let opacity):
+                context.target?.layer.shadowOpacity = Float(opacity)
+            case .shadowRadius(let radius):
+                context.target?.layer.shadowRadius = radius
             case .fadeIn(let direction):
                 context.alpha = 1.0
                 context.translation = direction.translation.negated
@@ -230,6 +252,13 @@ extension AnimatingType: Nameable {
         case .frame: return "frame"
         case .bounds: return "bounds"
         case .center: return "center"
+        case .size: return "size"
+        case .borderColor: return "borderColor"
+        case .borderWidth: return "borderWidth"
+        case .shadowColor: return "shadowColor"
+        case .shadowOffset: return "shadowOffset"
+        case .shadowOpacity: return "shadowOpacity"
+        case .shadowRadius: return "shadowRadius"
         case .fadeIn: return "fadeIn"
         case .fadeOut: return "fadeOut"
         case .slide: return "slide"
@@ -254,7 +283,7 @@ extension AnimatingType: Nameable {
 extension AnimatingType: CaseIterable {
     
     public static var allCases: [AnimatingType] {
-        return [.translate(0, 0), .scale(0, 0), .rotate(0), .backgroundColor(.clear), .cornerRadius(0), .alpha(0), .frame(.zero), .bounds(.zero), .center(.zero), .fadeIn(.none), .fadeOut(.none), .slide(.none), .squeeze(.none), .zoomIn, .zoomOut, .fall, .shake, .pop, .flip(.none), .morph, .flash, .wobble, .swing, .boing]
+        return [.translate(0, 0), .scale(0, 0), .rotate(0), .backgroundColor(.clear), .cornerRadius(0), .alpha(0), .frame(.zero), .bounds(.zero), .center(.zero), .size(.zero), .borderColor(.clear), .borderWidth(0), .shadowColor(.clear), .shadowOffset(.zero), .shadowOpacity(0), .shadowRadius(0), .fadeIn(.none), .fadeOut(.none), .slide(.none), .squeeze(.none), .zoomIn, .zoomOut, .fall, .shake, .pop, .flip(.none), .morph, .flash, .wobble, .swing, .boing]
     }
     
 }
@@ -277,8 +306,8 @@ extension AnimatingType: Hashable {
         case .backgroundColor(let color):
             hasher.combine("backgroundColor")
             hasher.combine(color)
-        case .cornerRadius(let cornerRadius):
-            hasher.combine(cornerRadius)
+        case .cornerRadius(let radius):
+            hasher.combine(radius)
         case .alpha(let alpha):
             hasher.combine("alpha")
             hasher.combine(alpha)
@@ -291,6 +320,27 @@ extension AnimatingType: Hashable {
         case .center(let point):
             hasher.combine("center")
             hasher.combine("\(point)")
+        case .size(let size):
+            hasher.combine("size")
+            hasher.combine("\(size)")
+        case .borderColor(let color):
+            hasher.combine("borderColor")
+            hasher.combine(color)
+        case .borderWidth(let width):
+            hasher.combine("borderWidth")
+            hasher.combine(width)
+        case .shadowColor(let color):
+            hasher.combine("shadowColor")
+            hasher.combine(color)
+        case .shadowOffset(let offset):
+            hasher.combine("shadowOffset")
+            hasher.combine("\(offset)")
+        case .shadowOpacity(let opacity):
+            hasher.combine("shadowOpacity")
+            hasher.combine(opacity)
+        case .shadowRadius(let radius):
+            hasher.combine("shadowRadius")
+            hasher.combine(radius)
         case .fadeIn(let direction):
             hasher.combine("fadeIn")
             hasher.combine(direction)
