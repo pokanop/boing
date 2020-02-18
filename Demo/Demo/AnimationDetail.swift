@@ -66,10 +66,12 @@ struct AnimationDetail: View {
                         AnimationProperties(animation: animation)
                     }
                 }
-            }.disabled(!context.enabled)
+            }
+            .disabled(!context.enabled)
         }
         .listStyle(GroupedListStyle())
         .navigationBarTitle("Animation", displayMode: .inline)
+        .modifier(KeyboardAdapter())
     }
     
 }

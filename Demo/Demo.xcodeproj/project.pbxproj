@@ -27,6 +27,7 @@
 		97D8D89A23FA919E00B6E7A2 /* SquareContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D8D89923FA919E00B6E7A2 /* SquareContainerView.swift */; };
 		97F013B723F8027B002C2CC0 /* HostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97F013B623F8027B002C2CC0 /* HostView.swift */; };
 		97F013B923F860F1002C2CC0 /* SquareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97F013B823F860F1002C2CC0 /* SquareView.swift */; };
+		97F013BB23FB7351002C2CC0 /* KeyboardAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97F013BA23FB7351002C2CC0 /* KeyboardAdapter.swift */; };
 		ED73003AE7A8F9415D5F62EC /* Pods_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26CE96D4478AF6562706B0B8 /* Pods_Demo.framework */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,7 @@
 		97D8D89923FA919E00B6E7A2 /* SquareContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareContainerView.swift; sourceTree = "<group>"; };
 		97F013B623F8027B002C2CC0 /* HostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostView.swift; sourceTree = "<group>"; };
 		97F013B823F860F1002C2CC0 /* SquareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareView.swift; sourceTree = "<group>"; };
+		97F013BA23FB7351002C2CC0 /* KeyboardAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAdapter.swift; sourceTree = "<group>"; };
 		BA610A26BD830D30774369F4 /* Pods-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.release.xcconfig"; path = "Target Support Files/Pods-Demo/Pods-Demo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -119,6 +121,7 @@
 				97C4007223F7A7D7009E21CF /* ColorView.swift */,
 				97C4007423F7A9DF009E21CF /* ColorPicker.swift */,
 				97F013B623F8027B002C2CC0 /* HostView.swift */,
+				97F013BA23FB7351002C2CC0 /* KeyboardAdapter.swift */,
 				971DD60623F6426000225B32 /* IndexedCollection.swift */,
 				9722AE1623F78C5000C0DD28 /* InputTextField.swift */,
 				971DD60423F6366000225B32 /* MultiSelectList.swift */,
@@ -266,6 +269,7 @@
 				9722AE1723F78C5000C0DD28 /* InputTextField.swift in Sources */,
 				97F013B923F860F1002C2CC0 /* SquareView.swift in Sources */,
 				971DD60523F6366000225B32 /* MultiSelectList.swift in Sources */,
+				97F013BB23FB7351002C2CC0 /* KeyboardAdapter.swift in Sources */,
 				97381EB123F3B45C001217F9 /* AppDelegate.swift in Sources */,
 				97381EB323F3B45C001217F9 /* SceneDelegate.swift in Sources */,
 				97C4007523F7A9DF009E21CF /* ColorPicker.swift in Sources */,

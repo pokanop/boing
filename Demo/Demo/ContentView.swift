@@ -57,6 +57,7 @@ struct ContentView: View {
                     }
                 }
                 .listStyle(GroupedListStyle())
+                .modifier(KeyboardAdapter())
             }
             .navigationBarTitle("The Boing Demo")
             .navigationBarItems(trailing: EditButton())
