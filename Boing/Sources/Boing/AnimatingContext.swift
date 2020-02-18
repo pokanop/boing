@@ -24,6 +24,7 @@ public class AnimatingContext: NSObject {
     var customAnimations: [((() -> ())?) -> ()] = []
     weak var target: UIView?
     var completion: (() -> ())?
+    let group: DispatchGroup = DispatchGroup()
     
     var delay: TimeInterval = 0.0
     var duration: TimeInterval = 0.7
@@ -122,6 +123,17 @@ public class AnimatingContext: NSObject {
         first?.animate()
     }
     
+    private func wait() {
+        // Ensure a single unwind is executed no matter how many animations
+        // are executed
+        DispatchQueue.global().async {
+            self.group.wait()
+            DispatchQueue.main.async {
+                self.unwind()
+            }
+        }
+    }
+    
     private func unwind() {
         guard let target = target else { return }
         
@@ -146,6 +158,8 @@ public class AnimatingContext: NSObject {
         applyViewAnimations()
         applyLayerAnimations()
         applyCustomAnimations()
+        
+        wait()
     }
     
     private func applyTransforms() {
@@ -177,6 +191,8 @@ public class AnimatingContext: NSObject {
         
         applyTransforms()
         
+        group.enter()
+        
         UIView.animate(withDuration: duration,
                        delay: delay,
                        usingSpringWithDamping: damping,
@@ -189,12 +205,14 @@ public class AnimatingContext: NSObject {
                            self.applyTransforms()
                        },
                        completion: { _ in
-                           self.unwind()
+                           self.group.leave()
                        })
     }
     
     private func applyLayerAnimations() {
         guard let target = target, hasLayerAnimations else { return }
+        
+        group.enter()
         
         let group = CAAnimationGroup()
         group.animations = layerAnimations
@@ -212,9 +230,11 @@ public class AnimatingContext: NSObject {
     private func applyCustomAnimations() {
         guard hasCustomAnimations else { return }
         
+        group.enter()
+        
         customAnimations.forEach { animation in
             animation {
-                self.unwind()
+                self.group.leave()
             }
         }
     }
@@ -225,7 +245,7 @@ extension AnimatingContext: CAAnimationDelegate {
     
     public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         guard flag else { return }
-        unwind()
+        group.leave()
     }
     
 }
