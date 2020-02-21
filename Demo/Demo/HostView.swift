@@ -25,10 +25,12 @@ struct HostView: UIViewRepresentable {
                 }
             }
             
+            var first: AnimatingContext?
             var ctx: AnimatingContext?
             self.store.animations.filter { $0.enabled }.forEach { animation in
                 if ctx == nil {
-                    ctx = uiView.squareView.animate(animations: animation.animatingTypes, options: animation.animatingOptions, completion: { completion(animation) })
+                    first = uiView.squareView.animate(animations: animation.animatingTypes, options: animation.animatingOptions, completion: { completion(animation) })
+                    ctx = first
                 } else {
                     ctx = ctx?.animate(
                         animations: animation.animatingTypes,
@@ -37,7 +39,6 @@ struct HostView: UIViewRepresentable {
                     )
                 }
             }
-            ctx?.commit()
         }
     }
     
