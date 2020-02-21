@@ -22,10 +22,8 @@ import QuartzCore
 ///         .scale(x: 1.2, y: 1.2)
 ///         .flip(direction: .left)
 ///         .boing()
-///         .commit()
 ///
-/// A final `commit` call will execute the animation sequence. Both `UIView` and
-/// `AnimatingContext` are extended to conform to this protocol.
+/// Both `UIView` and `AnimatingContext` are extended to conform to this protocol.
 public protocol Animating {
     
     /// Core animate method that can be used to combine one or many animations together.

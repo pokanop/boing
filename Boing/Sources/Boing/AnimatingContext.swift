@@ -10,21 +10,23 @@ import UIKit
 /// An `AnimatingContext` is a context used for executing one or more
 /// animations.
 ///
-/// It is the main object used to start an animation through the
-/// `commit` call. The context can be safely ignored in the middle of
+/// It is the main object used to start an animation through implicitly when
+/// no references remain. The context can be safely ignored in the middle of
 /// sequences and provides a buidler pattern to add more animations.
 ///
-/// Typically, you won't explicitly create an `AnimatingContext`
-/// and is usually generated as a side effect of calling `Animating` methods
-/// to perfom animations.
+/// Do not explicitly create an `AnimatingContext` and keeping a strong
+/// reference will prevent the animation from starting. An `AnimatingContext`
+/// is usually generated as a side effect of calling `Animating` methods
+/// to perform animations.
 public class AnimatingContext: NSObject {
     
     var animations: [AnimatingType] = []
+    var options: [AnimatingOption]
+    var completion: (() -> ())?
     var layerAnimations: [CAAnimation] = []
     var customAnimations: [((() -> ())?) -> ()] = []
     weak var target: UIView?
-    var completion: (() -> ())?
-    let group: DispatchGroup = DispatchGroup()
+    private let group: DispatchGroup = DispatchGroup()
     
     var delay: TimeInterval = 0.0
     var duration: TimeInterval = 0.7
@@ -40,7 +42,13 @@ public class AnimatingContext: NSObject {
     var rotation: CGFloat?
     var alpha: CGFloat?
     
-    var options: UIView.AnimationOptions {
+    var registrationID: UUID? {
+        didSet {
+            next?.registrationID = registrationID
+        }
+    }
+    
+    var animationOptions: UIView.AnimationOptions {
         var options: UIView.AnimationOptions = [.beginFromCurrentState, curve.asOptions()]
         if autoreverse {
             options.insert(.autoreverse)
@@ -51,8 +59,15 @@ public class AnimatingContext: NSObject {
         return options
     }
     
-    private var prev: AnimatingContext?
+    private weak var prev: AnimatingContext? {
+        didSet {
+            isTrailing = true   // Used to prevent duplicate registration
+        }
+    }
     private var next: AnimatingContext?
+    
+    private var isCopy: Bool = false
+    private var isTrailing: Bool = false
     
     private var hasViewAnimations: Bool {
         return animations.filter({ $0.isViewAnimation }).count > 0
@@ -66,31 +81,12 @@ public class AnimatingContext: NSObject {
         return !customAnimations.isEmpty
     }
     
-    private var contexts: [AnimatingContext] {
-        var contexts: [AnimatingContext] = []
-        var context = first
-        while let current = context {
-            contexts.append(current)
-            context = current.next
-        }
-        return contexts
-    }
-    
-    private var first: AnimatingContext? {
-        var context: AnimatingContext? = self
-        while let current = context {
-            if current.prev == nil {
-                break
-            }
-            context = current.prev
-        }
-        return context
-    }
-    
     init(_ animations: [AnimatingType],
          target: UIView,
          options: [AnimatingOption],
          completion: (() -> ())? = nil) {
+        self.options = options
+        
         super.init()
         
         self.animations = animations
@@ -110,17 +106,28 @@ public class AnimatingContext: NSObject {
         self.completion = completion
     }
     
-    /// The main method on `AnimatingContext` used to execute underlying
+    /// The deinit method on `AnimatingContext` is used to execute underlying
     /// animations.
     ///
-    /// This should be called on the final context in a sequence but can be called anywhere as it
-    /// will trace to the front of the list and start performing animations from there.
-    ///
-    /// - Note: This **must** be called at the end of an animation sequence or the animations
-    /// will not be executed.
-    public func commit() {
-        target?.isUserInteractionEnabled = false
-        first?.animate()
+    /// It registers a copy of the animation that is retained until it completes.
+    /// This allows for callers to build animation sequences using the simple and
+    /// declarative API without needing to call something additional.
+    deinit {
+        guard !isCopy, !isTrailing else { return }
+        
+        AnimatingRegistry.shared.add(copy() as! AnimatingContext)
+    }
+    
+    public override func copy() -> Any {
+        let copy = AnimatingContext(animations,
+                                    target: target!,
+                                    options: options,
+                                    completion: completion)
+        copy.prev = prev
+        copy.next = next
+        copy.isCopy = true  // Used to prevent animation registration
+        
+        return copy
     }
     
     private func wait() {
@@ -147,10 +154,12 @@ public class AnimatingContext: NSObject {
                 target.layer.transform = CATransform3DIdentity
             }
             target.isUserInteractionEnabled = true
+            
+            AnimatingRegistry.shared.remove(self)
         }
     }
     
-    private func animate() {
+    func animate() {
         animations.forEach { animation in
            animation.apply(self, position: .start)
         }
@@ -197,7 +206,7 @@ public class AnimatingContext: NSObject {
                        delay: delay,
                        usingSpringWithDamping: damping,
                        initialSpringVelocity: velocity,
-                       options: options,
+                       options: animationOptions,
                        animations: {
                            self.animations.forEach { animation in
                               animation.apply(self, position: .end)

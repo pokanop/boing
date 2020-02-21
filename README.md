@@ -31,10 +31,8 @@ The basic API pattern adds extensions to any `UIView` allowing you to execute si
 For example, using a preset animation you can do:
 
 ```swift
-view.boing().commit()
+view.boing()
 ```
-
-> A final `commit()` call must be added to start the animation allowing for chaining multiple animations.
 
 ### Animation Options
 
@@ -43,7 +41,7 @@ You can customize any of the animations and provide a completion handler simply 
 ```swift
 view.boing(options: [.duration(0.3)]) {
   // add your completion code
-}.commit()
+}
 ```
 
 The available options include:
@@ -104,7 +102,7 @@ You can run combined animations using the `animate()` method as follows:
 view.animate(
   animations: [.boing, .backgroundColor(.blue)],
   options: [.duration(0.5), .curve(.easeInOut)]
-).commit()
+)
 ```
 
 ### Chainable Animations
@@ -118,7 +116,6 @@ view
   .scale(x: 0.5, y: 0.5)
   .alpha(0.5)
   .wobble()
-  .commit()
 ```
 
 ## Demo
