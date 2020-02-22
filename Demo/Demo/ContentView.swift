@@ -14,6 +14,7 @@ struct ContentView: View {
     @State var useUIView: Bool = true
     @State private var needsRefresh: Bool = false
     @State private var isAnimating: Bool = false
+    @State private var showPresets: Bool = false
     
     var body: some View {
         NavigationView {
@@ -30,20 +31,32 @@ struct ContentView: View {
                             Text("Use UIView")
                         }
                     }
-                    
+
                     Section(header: Text("Animations")) {
-                        ForEach(store.animations) { context in
-                            if self.needsRefresh || !self.needsRefresh {    // HACK: WTF SwiftUI
-                                NavigationLink(destination: AnimationDetail(context: context)) {
-                                    Text(context.title)
-                                        .foregroundColor(context.isEmpty ? .red : .primary)
+                        Picker(selection: $showPresets, label: Text("Segments")) {
+                            Text("Presets").tag(true)
+                            Text("Customize").tag(false)
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                        
+                        if showPresets {
+                            ForEach(0..<AnimationType.allCases.count) { idx in
+                                PresetButton(animation: AnimationType.allCases[idx], isAnimating: self.$isAnimating, store: self.store)
+                            }
+                        } else {
+                            ForEach(store.animations) { context in
+                                if self.needsRefresh || !self.needsRefresh {    // HACK: WTF SwiftUI
+                                    NavigationLink(destination: AnimationDetail(context: context)) {
+                                        Text(context.title)
+                                            .foregroundColor(context.isEmpty ? .red : .primary)
+                                    }
                                 }
                             }
-                        }
-                        .onDelete(perform: delete)
-                        
-                        Button(action: add) {
-                            Text("Add")
+                            .onDelete(perform: delete)
+                            
+                            Button(action: add) {
+                                Text("Add")
+                            }
                         }
                     }
                     .onAppear {
@@ -87,4 +100,19 @@ struct ContentView_Previews: PreviewProvider {
                 .environment(\.colorScheme, .dark)
         }
     }
+}
+
+struct PresetButton: View {
+    
+    @State var animation: AnimationType
+    @Binding var isAnimating: Bool
+    @ObservedObject var store: AnimationsStore
+    
+    var body: some View {
+        Button(animation.name) {
+            self.store.defaultAnimation = self.animation
+            self.isAnimating = true
+        }
+    }
+    
 }

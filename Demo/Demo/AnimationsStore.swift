@@ -11,6 +11,7 @@ import Combine
 class AnimationsStore: ObservableObject {
     
     @Published var animations: [AnimationContext] = []
+    var defaultAnimation: AnimationType?
     
     func addAnimation() {
         animations.append(AnimationContext())
