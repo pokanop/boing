@@ -20,7 +20,12 @@ struct HostView: UIViewRepresentable {
     func updateUIView(_ uiView: SquareContainerView, context: UIViewRepresentableContext<HostView>) {
         if isAnimating {
             let completion = { (animation: AnimationContext) in
-                if animation == self.store.animations.last! {
+                guard let last = self.store.animations.last else {
+                    self.isAnimating = false
+                    return
+                }
+                
+                if animation == last {
                     self.isAnimating = false
                 }
             }

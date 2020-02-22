@@ -12,7 +12,7 @@ class SquareView: UIView {
     init() {
         super.init(frame: .zero)
         
-        backgroundColor = .black
+        backgroundColor = traitCollection.userInterfaceStyle == .dark ? .white : .black
         
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

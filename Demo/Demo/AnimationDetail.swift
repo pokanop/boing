@@ -24,7 +24,7 @@ struct AnimationDetail: View {
                         self.context.animations = selections
                     }) {
                         Text(context.title)
-                            .foregroundColor(context.isEmpty ? .red : .black)
+                            .foregroundColor(context.isEmpty ? .red : .primary)
                     }
                 }
                 
@@ -78,6 +78,11 @@ struct AnimationDetail: View {
 
 struct AnimationDetail_Previews: PreviewProvider {
     static var previews: some View {
-        return AnimationDetail(context: AnimationContext())
+        Group {
+            AnimationDetail(context: AnimationContext())
+                .environment(\.colorScheme, .light)
+            AnimationDetail(context: AnimationContext())
+                .environment(\.colorScheme, .dark)
+        }
     }
 }

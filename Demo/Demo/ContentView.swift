@@ -36,7 +36,7 @@ struct ContentView: View {
                             if self.needsRefresh || !self.needsRefresh {    // HACK: WTF SwiftUI
                                 NavigationLink(destination: AnimationDetail(context: context)) {
                                     Text(context.title)
-                                        .foregroundColor(context.isEmpty ? .red : .black)
+                                        .foregroundColor(context.isEmpty ? .red : .primary)
                                 }
                             }
                         }
@@ -80,6 +80,11 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(store: AnimationsStore())
+        Group {
+            ContentView(store: AnimationsStore())
+                .environment(\.colorScheme, .light)
+            ContentView(store: AnimationsStore())
+                .environment(\.colorScheme, .dark)
+        }
     }
 }
