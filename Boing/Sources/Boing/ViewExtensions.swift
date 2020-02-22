@@ -137,7 +137,7 @@ extension UIView: Animating {
         return AnimatingContext([.swing], target: self, options: options, completion: completion)
     }
     
-    @discardableResult public func boing(options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {
+    @discardableResult public func boing(options: [AnimatingOption] = [.damping(0.2), .velocity(5)], completion: (() -> ())? = nil) -> AnimatingContext {
         return AnimatingContext([.boing], target: self, options: options, completion: completion)
     }
     

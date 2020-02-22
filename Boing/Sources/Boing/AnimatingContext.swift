@@ -171,6 +171,23 @@ public class AnimatingContext: NSObject {
         wait()
     }
     
+    func animate(duration: TimeInterval? = nil,
+                 delay: TimeInterval? = nil,
+                 damping: CGFloat? = nil,
+                 velocity: CGFloat? = nil,
+                 options: UIView.AnimationOptions? = nil,
+                 animations: @escaping () -> (),
+                 completion: (() -> ())? = nil) {
+        UIView.animate(withDuration: duration ?? self.duration,
+                       delay: delay ?? self.delay,
+                       usingSpringWithDamping: damping ?? self.damping,
+                       initialSpringVelocity: velocity ?? self.velocity,
+                       options: options ?? self.animationOptions,
+                       animations: animations) { _ in
+                        completion?()
+        }
+    }
+    
     private func applyTransforms() {
         guard let target = target else { return }
         
@@ -202,20 +219,14 @@ public class AnimatingContext: NSObject {
         
         group.enter()
         
-        UIView.animate(withDuration: duration,
-                       delay: delay,
-                       usingSpringWithDamping: damping,
-                       initialSpringVelocity: velocity,
-                       options: animationOptions,
-                       animations: {
-                           self.animations.forEach { animation in
-                              animation.apply(self, position: .end)
-                           }
-                           self.applyTransforms()
-                       },
-                       completion: { _ in
-                           self.group.leave()
-                       })
+        animate(animations: {
+            self.animations.forEach { animation in
+                animation.apply(self, position: .end)
+            }
+            self.applyTransforms()
+        }) {
+            self.group.leave()
+        }
     }
     
     private func applyLayerAnimations() {
@@ -392,7 +403,7 @@ extension AnimatingContext: Animating {
         add([.swing], options, completion)
     }
     
-    @discardableResult public func boing(options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {
+    @discardableResult public func boing(options: [AnimatingOption] = [.damping(0.2), .velocity(5)], completion: (() -> ())? = nil) -> AnimatingContext {
         add([.boing], options, completion)
     }
     

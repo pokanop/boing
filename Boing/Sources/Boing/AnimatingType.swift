@@ -191,18 +191,12 @@ public enum AnimatingType {
                 guard let target = context.target else { return }
                 
                 context.customAnimations.append { completion in
-                    UIView.animateKeyframes(withDuration: context.duration, delay: context.delay, options: [.beginFromCurrentState, .calculationModeCubic], animations: {
-                        UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.1) {
-                            target.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-                        }
-                        UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.6) {
-                            target.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
-                        }
-                        UIView.addKeyframe(withRelativeStartTime: 0.7, relativeDuration: 0.3) {
+                    context.animate(duration: context.duration / 8, delay: 0, damping: 1, velocity: 0, options: [.beginFromCurrentState, context.curve.asOptions()], animations: {
+                        target.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
+                    }) {
+                        context.animate(duration: 7 * context.duration / 8, animations: {
                             target.transform = .identity
-                        }
-                    }) { _ in
-                        completion?()
+                        }, completion: completion)
                     }
                 }
             case .translate, .scale, .rotate, .backgroundColor, .cornerRadius, .alpha, .frame, .bounds, .center, .size, .shadowOffset, .shadowOpacity, .shadowRadius, .slide, .fall:
