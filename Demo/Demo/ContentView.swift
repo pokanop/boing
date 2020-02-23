@@ -14,7 +14,7 @@ struct ContentView: View {
     @State var useUIView: Bool = true
     @State private var needsRefresh: Bool = false
     @State private var isAnimating: Bool = false
-    @State private var showPresets: Bool = false
+    @State private var showPresets: Bool = true
     
     var body: some View {
         NavigationView {
@@ -54,9 +54,7 @@ struct ContentView: View {
                             }
                             .onDelete(perform: delete)
                             
-                            Button(action: add) {
-                                Text("Add")
-                            }
+                            CenteredButton(title: "add", action: add)
                         }
                     }
                     .onAppear {
@@ -64,9 +62,7 @@ struct ContentView: View {
                     }
                     
                     Section(header: Text("Actions")) {
-                        Button(action: animate) {
-                            Text("Animate")
-                        }
+                        CenteredButton(title: "animate", action: animate)
                     }
                 }
                 .listStyle(GroupedListStyle())
@@ -100,19 +96,4 @@ struct ContentView_Previews: PreviewProvider {
                 .environment(\.colorScheme, .dark)
         }
     }
-}
-
-struct PresetButton: View {
-    
-    @State var animation: AnimationType
-    @Binding var isAnimating: Bool
-    @ObservedObject var store: AnimationsStore
-    
-    var body: some View {
-        Button(animation.name) {
-            self.store.defaultAnimation = self.animation
-            self.isAnimating = true
-        }
-    }
-    
 }

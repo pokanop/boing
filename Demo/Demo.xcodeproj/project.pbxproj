@@ -21,6 +21,8 @@
 		974DDBE323F5155B000D4A4B /* AnimationsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974DDBE223F5155B000D4A4B /* AnimationsStore.swift */; };
 		974DDBE523F51808000D4A4B /* Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974DDBE423F51808000D4A4B /* Animation.swift */; };
 		974DDBE723F52D23000D4A4B /* AnimationDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974DDBE623F52D23000D4A4B /* AnimationDetail.swift */; };
+		9788F029240273030021D908 /* CenteredButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9788F028240273030021D908 /* CenteredButton.swift */; };
+		9788F02B240273940021D908 /* PresetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9788F02A240273940021D908 /* PresetButton.swift */; };
 		97C4007323F7A7D7009E21CF /* ColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C4007223F7A7D7009E21CF /* ColorView.swift */; };
 		97C4007523F7A9DF009E21CF /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C4007423F7A9DF009E21CF /* ColorPicker.swift */; };
 		97D5CA3723F6764100872C9B /* AnimationProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D5CA3623F6764100872C9B /* AnimationProperties.swift */; };
@@ -50,6 +52,8 @@
 		974DDBE223F5155B000D4A4B /* AnimationsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationsStore.swift; sourceTree = "<group>"; };
 		974DDBE423F51808000D4A4B /* Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animation.swift; sourceTree = "<group>"; };
 		974DDBE623F52D23000D4A4B /* AnimationDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationDetail.swift; sourceTree = "<group>"; };
+		9788F028240273030021D908 /* CenteredButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredButton.swift; sourceTree = "<group>"; };
+		9788F02A240273940021D908 /* PresetButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetButton.swift; sourceTree = "<group>"; };
 		97C4007223F7A7D7009E21CF /* ColorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ColorView.swift; path = /Users/saheljalal/code/orgs/pokanop/boing/Demo/Demo/ColorView.swift; sourceTree = "<absolute>"; };
 		97C4007423F7A9DF009E21CF /* ColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
 		97D5CA3623F6764100872C9B /* AnimationProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationProperties.swift; sourceTree = "<group>"; };
@@ -117,6 +121,8 @@
 				97D5CA3623F6764100872C9B /* AnimationProperties.swift */,
 				974DDBE223F5155B000D4A4B /* AnimationsStore.swift */,
 				97381EB423F3B45C001217F9 /* ContentView.swift */,
+				9788F028240273030021D908 /* CenteredButton.swift */,
+				9788F02A240273940021D908 /* PresetButton.swift */,
 				974DDBDE23F50003000D4A4B /* CircleView.swift */,
 				97C4007223F7A7D7009E21CF /* ColorView.swift */,
 				97C4007423F7A9DF009E21CF /* ColorPicker.swift */,
@@ -261,7 +267,9 @@
 			files = (
 				97D8D89A23FA919E00B6E7A2 /* SquareContainerView.swift in Sources */,
 				974DDBDF23F50003000D4A4B /* CircleView.swift in Sources */,
+				9788F029240273030021D908 /* CenteredButton.swift in Sources */,
 				97F013B723F8027B002C2CC0 /* HostView.swift in Sources */,
+				9788F02B240273940021D908 /* PresetButton.swift in Sources */,
 				971DD60723F6426000225B32 /* IndexedCollection.swift in Sources */,
 				974DDBE323F5155B000D4A4B /* AnimationsStore.swift in Sources */,
 				97C4007323F7A7D7009E21CF /* ColorView.swift in Sources */,
