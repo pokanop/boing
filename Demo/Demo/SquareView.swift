@@ -10,15 +10,9 @@ import UIKit
 class SquareView: UIView {
 
     init() {
-        super.init(frame: .zero)
+        super.init(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
         
         backgroundColor = traitCollection.userInterfaceStyle == .dark ? .white : .black
-        
-        translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalTo: widthAnchor),
-            heightAnchor.constraint(greaterThanOrEqualToConstant: 200)
-        ])
     }
     
     required init?(coder: NSCoder) {

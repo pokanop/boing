@@ -10,6 +10,7 @@ import UIKit
 class SquareContainerView: UIView {
     
     let squareView: SquareView = SquareView()
+    var isCentered: Bool = false
 
     init() {
         super.init(frame: .zero)
@@ -24,7 +25,10 @@ class SquareContainerView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        guard !isCentered else { return }
+        
         squareView.center = center
+        isCentered = true
     }
     
 }
