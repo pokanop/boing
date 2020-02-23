@@ -183,8 +183,11 @@ public class AnimatingContext: NSObject {
                        usingSpringWithDamping: damping ?? self.damping,
                        initialSpringVelocity: velocity ?? self.velocity,
                        options: options ?? self.animationOptions,
-                       animations: animations) { _ in
-                        completion?()
+                       animations: {
+            UIView.setAnimationRepeatCount(self.repeatCount)
+            animations()
+        }) { _ in
+            completion?()
         }
     }
     
