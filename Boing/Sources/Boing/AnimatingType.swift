@@ -99,6 +99,7 @@ public enum AnimatingType {
                 context.alpha = 1.0
             case .zoomIn:
                 context.alpha = 0.0
+                context.scale = CGPoint(x: 2.0, y: 2.0)
             case .zoomOut:
                 context.alpha = 1.0
             case .shake:
@@ -245,7 +246,7 @@ public enum AnimatingType {
                 context.translation = direction.translation
             case .zoomIn:
                 context.alpha = 1.0
-                context.scale = CGPoint(x: 2.0, y: 2.0)
+                context.scale = CGPoint(x: 0.5, y: 0.5)
             case .zoomOut:
                 context.alpha = 0.0
                 context.scale = CGPoint(x: 2.0, y: 2.0)

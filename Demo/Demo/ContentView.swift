@@ -35,7 +35,7 @@ struct ContentView: View {
                     Section(header: Text("Animations")) {
                         Picker(selection: $showPresets, label: Text("Segments")) {
                             Text("Presets").tag(true)
-                            Text("Customize").tag(false)
+                            Text("Custom").tag(false)
                         }
                         .pickerStyle(SegmentedPickerStyle())
                         

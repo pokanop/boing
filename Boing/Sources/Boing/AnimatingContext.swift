@@ -209,7 +209,9 @@ public class AnimatingContext: NSObject {
             transform = rotate.concatenating(transform)
         }
         
-        target.transform = transform
+        if transform != target.transform {
+            target.transform = transform
+        }
     }
     
     private func applyViewAnimations() {
