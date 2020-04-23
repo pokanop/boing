@@ -61,7 +61,7 @@ public protocol Animating {
     /// Rotate content by an `angle` in an animation.
     ///
     /// - Parameters:
-    ///   - angle: The angle in radians for the rotation.
+    ///   - angle: The angle in degrees for the rotation.
     ///   - options: The options to apply to this animation.
     ///   - completion: A completion handler to be exected after the animation is finished.
     @discardableResult func rotate(angle: CGFloat, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext

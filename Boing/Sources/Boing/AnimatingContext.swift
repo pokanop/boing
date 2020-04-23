@@ -208,7 +208,7 @@ public class AnimatingContext: NSObject {
         }
         
         if let rotation = rotation {
-            let rotate = CGAffineTransform(rotationAngle: rotation)
+            let rotate = CGAffineTransform(rotationAngle: rotation * .pi / 180)
             transform = rotate.concatenating(transform)
         }
         
