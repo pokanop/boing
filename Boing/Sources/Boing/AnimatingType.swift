@@ -13,8 +13,11 @@ import UIKit
 /// define how the animation will execute. These are relevant
 /// to the specific animation type.
 ///
-/// - Note: Some animations may conflict with others and
-///         may have undefined behavior.
+/// - Attention: Some animations may conflict with others and
+///              have undefined behavior.
+///
+/// - Note: More animatatable properties exist and
+///         may be added in the future. See [here](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreAnimation_guide/AnimatableProperties/AnimatableProperties.html)
 public enum AnimatingType {
     
     // Basic
@@ -57,13 +60,18 @@ public enum AnimatingType {
     
     var isViewAnimation: Bool {
         switch self {
-        case .translate, .scale, .rotate, .backgroundColor, .cornerRadius, .alpha, .frame, .bounds, .center, .size, .shadowColor, .shadowOffset, .shadowOpacity, .shadowRadius, .fadeIn, .fadeOut, .zoomIn, .zoomOut, .slide, .fall: return true
+        case .translate, .scale, .rotate, .backgroundColor, .cornerRadius, .alpha, .frame, .bounds, .center, .size, .fadeIn, .fadeOut, .zoomIn, .zoomOut, .slide, .fall: return true
         case .squeeze(let direction): return direction != .none
-        case .borderColor, .borderWidth, .shake, .pop, .flip, .morph, .flash, .wobble, .swing, .delay, .boing: return false
+        case .borderColor, .borderWidth, .shadowColor, .shadowOffset, .shadowOpacity, .shadowRadius, .shake, .pop, .flip, .morph, .flash, .wobble, .swing, .delay, .boing: return false
         }
     }
     
     func apply(_ context: AnimatingContext, position: AnimatingPosition) {
+        guard let target = context.target else {
+            assertionFailure("Animation context cannot have nil target")
+            return
+        }
+        
         switch position {
         case .start:
             switch self {
@@ -71,36 +79,75 @@ public enum AnimatingType {
                 let animation = CABasicAnimation()
                 animation.keyPath = "borderColor"
                 animation.toValue = color.cgColor
-                if !context.removeOnCompletion {
-                    context.target?.layer.borderColor = color.cgColor
+                context.persist {
+                    target.layer.borderColor = color.cgColor
                 }
                 context.layerAnimations.append(animation)
             case .borderWidth(let width):
                 let animation = CABasicAnimation()
                 animation.keyPath = "borderWidth"
                 animation.toValue = width
-                if !context.removeOnCompletion {
-                    context.target?.layer.borderWidth = width
+                context.persist {
+                    target.layer.borderWidth = width
                 }
                 context.layerAnimations.append(animation)
             case .shadowColor(let color):
                 let animation = CABasicAnimation()
                 animation.keyPath = "shadowColor"
-                animation.fromValue = context.target?.layer.shadowColor
                 animation.toValue = color.cgColor
-                if !context.removeOnCompletion {
-                    context.target?.layer.shadowColor = color.cgColor
+                context.persist {
+                    target.layer.shadowColor = color.cgColor
+                }
+                context.layerAnimations.append(animation)
+            case .shadowOffset(let offset):
+                let animation = CABasicAnimation()
+                animation.keyPath = "shadowOffset"
+                animation.toValue = offset
+                context.persist {
+                    target.layer.shadowOffset = offset
+                }
+                context.layerAnimations.append(animation)
+            case .shadowOpacity(let opacity):
+                let animation = CABasicAnimation()
+                animation.keyPath = "shadowOpacity"
+                animation.toValue = opacity
+                context.persist {
+                    target.layer.shadowOpacity = Float(opacity)
+                }
+                context.layerAnimations.append(animation)
+            case .shadowRadius(let radius):
+                let animation = CABasicAnimation()
+                animation.keyPath = "shadowRadius"
+                animation.toValue = radius
+                context.persist {
+                    target.layer.shadowRadius = radius
                 }
                 context.layerAnimations.append(animation)
             case .fadeIn(let direction):
+                let original = target.alpha
+                context.reset {
+                    target.alpha = original
+                }
                 context.alpha = 0.0
                 context.translation = direction.translation
             case .fadeOut:
+                let original = target.alpha
+                context.reset {
+                    target.alpha = original
+                }
                 context.alpha = 1.0
             case .zoomIn:
+                let original = target.alpha
+                context.reset {
+                    target.alpha = original
+                }
                 context.alpha = 0.0
                 context.scale = CGPoint(x: 2.0, y: 2.0)
             case .zoomOut:
+                let original = target.alpha
+                context.reset {
+                    target.alpha = original
+                }
                 context.alpha = 1.0
             case .shake:
                 let animation = CAKeyframeAnimation()
@@ -117,8 +164,6 @@ public enum AnimatingType {
                 animation.isAdditive = true
                 context.layerAnimations.append(animation)
             case .flip(let direction):
-                guard let target = context.target else { return }
-
                 var perspective = CATransform3DIdentity
                 perspective.m34 = -1.0 / target.layer.frame.size.width / 2
                 
@@ -189,8 +234,6 @@ public enum AnimatingType {
                     }
                 })
             case .boing:
-                guard let target = context.target else { return }
-                
                 context.customAnimations.append { completion in
                     context.animate(duration: context.duration / 8, delay: 0, damping: 1, velocity: 0, options: [.beginFromCurrentState, context.curve.asOptions()], animations: {
                         target.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
@@ -200,7 +243,7 @@ public enum AnimatingType {
                         }, completion: completion)
                     }
                 }
-            case .translate, .scale, .rotate, .backgroundColor, .cornerRadius, .alpha, .frame, .bounds, .center, .size, .shadowOffset, .shadowOpacity, .shadowRadius, .slide, .fall:
+            case .translate, .scale, .rotate, .backgroundColor, .cornerRadius, .alpha, .frame, .bounds, .center, .size, .slide, .fall:
                 break
             }
         case .end:
@@ -212,26 +255,48 @@ public enum AnimatingType {
             case .rotate(let angle):
                 context.rotation = angle
             case .backgroundColor(let color):
-                context.target?.backgroundColor = color
+                let original: UIColor? = target.backgroundColor
+                context.reset {
+                    target.backgroundColor = original
+                }
+                target.backgroundColor = color
             case .cornerRadius(let radius):
-                context.target?.layer.cornerRadius = radius
+                let original = target.layer.cornerRadius
+                context.reset {
+                    target.layer.cornerRadius = original
+                }
+                target.layer.cornerRadius = radius
             case .alpha(let alpha):
+                let original = target.alpha
+                context.reset {
+                    target.alpha = original
+                }
                 context.alpha = alpha
             case .frame(let frame):
-                context.target?.frame = frame
+                let original = target.frame
+                context.reset {
+                    target.frame = original
+                }
+                target.frame = frame
             case .bounds(let bounds):
-                context.target?.bounds = bounds
+                let original = target.bounds
+                context.reset {
+                    target.bounds = original
+                }
+                target.bounds = bounds
             case .center(let center):
-                context.target?.center = center
+                let original = target.center
+                context.reset {
+                    target.center = original
+                }
+                target.center = center
             case .size(let size):
-                guard let origin = context.target?.frame.origin else { return }
-                context.target?.frame = CGRect(origin: origin, size: size)
-            case .shadowOffset(let offset):
-                context.target?.layer.shadowOffset = offset
-            case .shadowOpacity(let opacity):
-                context.target?.layer.shadowOpacity = Float(opacity)
-            case .shadowRadius(let radius):
-                context.target?.layer.shadowRadius = radius
+                let original = target.frame
+                context.reset {
+                    target.frame = original
+                }
+                let origin = target.frame.origin
+                target.frame = CGRect(origin: origin, size: size)
             case .fadeIn(let direction):
                 context.alpha = 1.0
                 context.translation = direction.translation.negated
@@ -252,8 +317,8 @@ public enum AnimatingType {
                 context.scale = CGPoint(x: 2.0, y: 2.0)
             case .fall:
                 context.translation = CGPoint(x: 0, y: 400)
-                context.rotation = 45 * (CGFloat.pi / 180)
-            case .borderColor, .borderWidth, .shadowColor, .shake, .pop, .flip, .morph, .flash, .wobble, .swing, .delay, .boing:
+                context.rotation = 45
+            case .borderColor, .borderWidth, .shadowColor, .shadowOffset, .shadowOpacity, .shadowRadius, .shake, .pop, .flip, .morph, .flash, .wobble, .swing, .delay, .boing:
                 break
             }
         }

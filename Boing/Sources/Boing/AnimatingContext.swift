@@ -27,6 +27,7 @@ public class AnimatingContext: NSObject {
     var customAnimations: [((() -> ())?) -> ()] = []
     weak var target: UIView?
     private let group: DispatchGroup = DispatchGroup()
+    private var breadcrumbs: [() -> ()] = []
     
     var delay: TimeInterval = 0.0
     var duration: TimeInterval = 0.7
@@ -35,7 +36,7 @@ public class AnimatingContext: NSObject {
     var velocity: CGFloat = 0.7
     var repeatCount: Float = 1.0
     var autoreverse: Bool = false
-    var removeOnCompletion: Bool = true
+    var removeOnCompletion: Bool = false
     
     var translation: CGPoint?
     var scale: CGPoint?
@@ -144,22 +145,25 @@ public class AnimatingContext: NSObject {
     private func unwind() {
         guard let target = target else { return }
         
+        breadcrumbs.forEach { $0() }
         completion?()
         next?.animate()
         
         // Last animation
-        if self.next == nil {
-            if removeOnCompletion {
-                target.transform = .identity
-                target.layer.transform = CATransform3DIdentity
-            }
-            target.isUserInteractionEnabled = true
-            
-            AnimatingRegistry.shared.remove(self)
+        guard self.next == nil else { return }
+        
+        if removeOnCompletion {
+            target.transform = .identity
+            target.layer.transform = CATransform3DIdentity
         }
+        target.isUserInteractionEnabled = true
+        
+        AnimatingRegistry.shared.remove(self)
     }
     
     func animate() {
+        // FIXME: This feels asymmetric, there's a better way to organize
+        // all of these animations
         animations.forEach { animation in
            animation.apply(self, position: .start)
         }
@@ -184,6 +188,8 @@ public class AnimatingContext: NSObject {
                        initialSpringVelocity: velocity ?? self.velocity,
                        options: options ?? self.animationOptions,
                        animations: {
+            // DEPRECATED: Poo. Need to find a different solution after iOS 13
+            // See https://developer.apple.com/documentation/uikit/uiview/1622419-setanimationrepeatcount
             UIView.setAnimationRepeatCount(self.repeatCount)
             animations()
         }) { _ in
@@ -245,7 +251,7 @@ public class AnimatingContext: NSObject {
         group.timingFunction = curve.asTimingFunction()
         group.repeatCount = repeatCount
         group.autoreverses = autoreverse
-        group.isRemovedOnCompletion = removeOnCompletion
+        group.fillMode = .forwards
         group.beginTime = CACurrentMediaTime() + CFTimeInterval(delay)
         group.delegate = self
         
@@ -264,12 +270,21 @@ public class AnimatingContext: NSObject {
         }
     }
     
+    func persist(breadcrumb: @escaping () -> ()) {
+        guard !removeOnCompletion else { return }
+        breadcrumbs.append(breadcrumb)
+    }
+    
+    func reset(breadcrumb: @escaping () -> ()) {
+        guard removeOnCompletion else { return }
+        breadcrumbs.append(breadcrumb)
+    }
+    
 }
 
 extension AnimatingContext: CAAnimationDelegate {
     
     public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        guard flag else { return }
         group.leave()
     }
     
