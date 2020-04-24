@@ -431,4 +431,8 @@ extension AnimatingContext: Animating {
         add([.delay(time)], [], completion)
     }
     
+    @discardableResult public func identity(time: TimeInterval, completion: (() -> ())? = nil) -> AnimatingContext {
+        add([.identity(time)], [], completion)
+    }
+    
 }

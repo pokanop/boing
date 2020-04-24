@@ -293,4 +293,13 @@ public protocol Animating {
     ///   - completion: A completion handler to be exected after the delay is finished.
     @discardableResult func delay(time: TimeInterval, completion: (() -> ())?) -> AnimatingContext
     
+    /// Perform an animation back to identity.
+    ///
+    /// This method is used to reset state to identity transforms with animation.
+    ///
+    /// - Parameters:
+    ///   - time: The time to delay before the next sequence.
+    ///   - completion: A completion handler to be exected after the delay is finished.
+    @discardableResult func identity(time: TimeInterval, completion: (() -> ())?) -> AnimatingContext
+    
 }

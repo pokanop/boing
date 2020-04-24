@@ -56,6 +56,8 @@ autoreverse(Bool)
 removeOnCompletion(Bool)
 ```
 
+> Note that by default animations persist, or `removeOnCompletion` is false.
+
 ### Animation Types
 
 Boing provides several basic and preset animations including:
@@ -91,6 +93,12 @@ flash
 wobble
 swing
 boing
+```
+
+Boing also provides utility methods and animations including:
+```swift
+delay(time)
+identity(time)
 ```
 
 ### Coalesced Animations

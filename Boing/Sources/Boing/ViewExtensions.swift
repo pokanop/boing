@@ -145,4 +145,8 @@ extension UIView: Animating {
         return AnimatingContext([.delay(time)], target: self, options: [], completion: completion)
     }
     
+    @discardableResult public func identity(time: TimeInterval, completion: (() -> ())? = nil) -> AnimatingContext {
+        return AnimatingContext([.identity(time)], target: self, options: [], completion: completion)
+    }
+    
 }

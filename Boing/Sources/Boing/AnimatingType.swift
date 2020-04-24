@@ -57,12 +57,13 @@ public enum AnimatingType {
     
     // Utilities
     case delay(TimeInterval)
+    case identity(TimeInterval)
     
     var isViewAnimation: Bool {
         switch self {
         case .translate, .scale, .rotate, .backgroundColor, .cornerRadius, .alpha, .frame, .bounds, .center, .size, .fadeIn, .fadeOut, .zoomIn, .zoomOut, .slide, .fall: return true
         case .squeeze(let direction): return direction != .none
-        case .borderColor, .borderWidth, .shadowColor, .shadowOffset, .shadowOpacity, .shadowRadius, .shake, .pop, .flip, .morph, .flash, .wobble, .swing, .delay, .boing: return false
+        case .borderColor, .borderWidth, .shadowColor, .shadowOffset, .shadowOpacity, .shadowRadius, .shake, .pop, .flip, .morph, .flash, .wobble, .swing, .boing, .delay, .identity: return false
         }
     }
     
@@ -227,12 +228,6 @@ public enum AnimatingType {
                 animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
                 animation.isAdditive = true
                 context.layerAnimations.append(animation)
-            case .delay(let time):
-                context.customAnimations.append({ completion in
-                    DispatchQueue.main.asyncAfter(deadline: .now() + time) {
-                        completion?()
-                    }
-                })
             case .boing:
                 context.customAnimations.append { completion in
                     context.animate(duration: context.duration / 8, delay: 0, damping: 1, velocity: 0, options: [.beginFromCurrentState, context.curve.asOptions()], animations: {
@@ -243,6 +238,19 @@ public enum AnimatingType {
                         }, completion: completion)
                     }
                 }
+            case .delay(let time):
+                context.customAnimations.append({ completion in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + time) {
+                        completion?()
+                    }
+                })
+            case .identity(let time):
+                context.customAnimations.append({ completion in
+                    UIView.animate(withDuration: time) {
+                        target.transform = .identity
+                        target.layer.transform = CATransform3DIdentity
+                    }
+                })
             case .translate, .scale, .rotate, .backgroundColor, .cornerRadius, .alpha, .frame, .bounds, .center, .size, .slide, .fall:
                 break
             }
@@ -318,7 +326,7 @@ public enum AnimatingType {
             case .fall:
                 context.translation = CGPoint(x: 0, y: 400)
                 context.rotation = 45
-            case .borderColor, .borderWidth, .shadowColor, .shadowOffset, .shadowOpacity, .shadowRadius, .shake, .pop, .flip, .morph, .flash, .wobble, .swing, .delay, .boing:
+            case .borderColor, .borderWidth, .shadowColor, .shadowOffset, .shadowOpacity, .shadowRadius, .shake, .pop, .flip, .morph, .flash, .wobble, .swing, .boing, .delay, .identity:
                 break
             }
         }
@@ -362,6 +370,7 @@ extension AnimatingType: Nameable {
         case .swing: return "swing"
         case .boing: return "boing"
         case .delay: return "delay"
+        case .identity: return "identity"
         }
     }
     
@@ -464,6 +473,7 @@ extension AnimatingType: Hashable {
         case .boing:
             hasher.combine("boing")
         case .delay: hasher.combine("delay")
+        case .identity: hasher.combine("identity")
         }
     }
     
