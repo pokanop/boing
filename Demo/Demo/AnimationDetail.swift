@@ -59,6 +59,9 @@ struct AnimationDetail: View {
                     Toggle(isOn: $context.removeOnCompletion) {
                         Text("removeOnCompletion")
                     }
+                    Toggle(isOn: $context.noAnimate) {
+                        Text("noAnimate")
+                    }
                 }
                 
                 ForEach(context.animations.filter({ $0.associatedProperty != .none })) { animation in

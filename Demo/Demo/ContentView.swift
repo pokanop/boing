@@ -40,7 +40,7 @@ struct ContentView: View {
                         .pickerStyle(SegmentedPickerStyle())
                         
                         if showPresets {
-                            ForEach(0..<AnimationType.allCases.count) { idx in
+                            ForEach(0..<AnimationType.presetCases.count) { idx in
                                 PresetButton(animation: AnimationType.allCases[idx], isAnimating: self.$isAnimating, store: self.store)
                             }
                         } else {

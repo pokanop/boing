@@ -1,5 +1,5 @@
 PODS:
-  - Boing (0.7.0)
+  - Boing (0.7.3)
 
 DEPENDENCIES:
   - Boing
@@ -9,7 +9,7 @@ SPEC REPOS:
     - Boing
 
 SPEC CHECKSUMS:
-  Boing: 581aab5832deae4cd9449a77d2cfb1bb8f805690
+  Boing: fb4d3e186290038fa04182283f43da4965c40445
 
 PODFILE CHECKSUM: 234002ed9c3ce1d6b297755590b9e1cd0562cae5
 

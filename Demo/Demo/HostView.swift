@@ -97,7 +97,9 @@ struct HostView: UIViewRepresentable {
         case .wobble: uiView.wobble(options: options, completion: completion)
         case .swing: uiView.swing(options: options, completion: completion)
         case .boing: uiView.boing(options: options, completion: completion)
-        case .delay: uiView.delay(time: 0, completion: completion)
+        case .delay: uiView.delay(time: 0.7, completion: completion)
+        case .identity: uiView.identity(time: 0.7, completion: completion)
+        case .now: uiView.now(completion: completion)
         }
     }
     
