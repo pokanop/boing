@@ -302,4 +302,13 @@ public protocol Animating {
     ///   - completion: A completion handler to be exected after the delay is finished.
     @discardableResult func identity(time: TimeInterval, completion: (() -> ())?) -> AnimatingContext
     
+    /// Perform all transforms in previous sequences immediately without animation.
+    ///
+    /// This method is used to immediately apply transforms without animation. It's a convenient
+    /// way to update element changes if needed.
+    ///
+    /// - Parameters:
+    ///   - completion: A completion handler to be exected after the delay is finished.
+    @discardableResult func now(completion: (() -> ())?) -> AnimatingContext
+    
 }

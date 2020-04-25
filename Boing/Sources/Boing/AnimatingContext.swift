@@ -21,13 +21,26 @@ import UIKit
 public class AnimatingContext: NSObject {
     
     var animations: [AnimatingType] = []
-    var options: [AnimatingOption]
     var completion: (() -> ())?
     var layerAnimations: [CAAnimation] = []
     var customAnimations: [((() -> ())?) -> ()] = []
     weak var target: UIView?
     private let group: DispatchGroup = DispatchGroup()
     private var breadcrumbs: [() -> ()] = []
+    
+    var options: [AnimatingOption] {
+        return [
+            .delay(delay),
+            .duration(duration),
+            .curve(curve),
+            .damping(damping),
+            .velocity(velocity),
+            .repeatCount(repeatCount),
+            .autoreverse(autoreverse),
+            .removeOnCompletion(removeOnCompletion),
+            .noAnimate(noAnimate)
+        ]
+    }
     
     var delay: TimeInterval = 0.0
     var duration: TimeInterval = 0.7
@@ -37,6 +50,7 @@ public class AnimatingContext: NSObject {
     var repeatCount: Float = 1.0
     var autoreverse: Bool = false
     var removeOnCompletion: Bool = false
+    var noAnimate: Bool = false
     
     var translation: CGPoint?
     var scale: CGPoint?
@@ -62,6 +76,7 @@ public class AnimatingContext: NSObject {
     
     private weak var prev: AnimatingContext? {
         didSet {
+            guard prev != nil else { return }
             isTrailing = true   // Used to prevent duplicate registration
         }
     }
@@ -75,35 +90,22 @@ public class AnimatingContext: NSObject {
     }
     
     private var hasLayerAnimations: Bool {
-        return !layerAnimations.isEmpty
+        return animations.filter({ $0.isLayerAnimation }).count > 0
     }
     
     private var hasCustomAnimations: Bool {
-        return !customAnimations.isEmpty
+        return animations.filter({ $0.isCustomAnimation }).count > 0
     }
     
     init(_ animations: [AnimatingType],
          target: UIView,
          options: [AnimatingOption],
          completion: (() -> ())? = nil) {
-        self.options = options
-        
         super.init()
         
         self.animations = animations
         self.target = target
-        options.forEach { option in
-            switch option {
-            case .curve(let curve): self.curve = curve
-            case .damping(let damping): self.damping = damping
-            case .delay(let delay): self.delay = delay
-            case .duration(let duration): self.duration = duration
-            case .repeatCount(let repeatCount): self.repeatCount = repeatCount
-            case .autoreverse(let autoreverse): self.autoreverse = autoreverse
-            case .velocity(let velocity): self.velocity = velocity
-            case .removeOnCompletion(let remove): self.removeOnCompletion = remove
-            }
-        }
+        self.set(options: options)
         self.completion = completion
     }
     
@@ -119,14 +121,33 @@ public class AnimatingContext: NSObject {
         AnimatingRegistry.shared.add(copy() as! AnimatingContext)
     }
     
+    func set(options: [AnimatingOption]) {
+        options.forEach { option in
+            switch option {
+            case .curve(let curve): self.curve = curve
+            case .damping(let damping): self.damping = damping
+            case .delay(let delay): self.delay = delay
+            case .duration(let duration): self.duration = duration
+            case .repeatCount(let repeatCount): self.repeatCount = repeatCount
+            case .autoreverse(let autoreverse): self.autoreverse = autoreverse
+            case .velocity(let velocity): self.velocity = velocity
+            case .removeOnCompletion(let remove): self.removeOnCompletion = remove
+            case .noAnimate(let noAnimate): self.noAnimate = noAnimate
+            }
+        }
+    }
+    
     public override func copy() -> Any {
+        guard let target = target else { fatalError() }
+        
         let copy = AnimatingContext(animations,
-                                    target: target!,
+                                    target: target,
                                     options: options,
                                     completion: completion)
         copy.prev = prev
         copy.next = next
-        copy.isCopy = true  // Used to prevent animation registration
+        copy.next?.prev = copy  // On deinit this appears to be set to nil
+        copy.isCopy = true  // Used to prevent redundant animation registration
         
         return copy
     }
@@ -161,13 +182,18 @@ public class AnimatingContext: NSObject {
         AnimatingRegistry.shared.remove(self)
     }
     
-    func animate() {
-        // FIXME: This feels asymmetric, there's a better way to organize
-        // all of these animations
-        animations.forEach { animation in
-           animation.apply(self, position: .start)
+    func preprocess() {
+        // Mark any `noAnimate` contexts before starting the animations
+        walk { ctx in
+            guard ctx.animations.contains(.now) else { return }
+            
+            ctx.walk(reverse: true) { ctx in
+                ctx.set(options: [.noAnimate(true)])
+            }
         }
-        
+    }
+    
+    func animate() {
         applyViewAnimations()
         applyLayerAnimations()
         applyCustomAnimations()
@@ -226,15 +252,24 @@ public class AnimatingContext: NSObject {
     private func applyViewAnimations() {
         guard hasViewAnimations else { return }
         
-        applyTransforms()
-        
         group.enter()
         
-        animate(animations: {
-            self.animations.forEach { animation in
-                animation.apply(self, position: .end)
-            }
+        animations.forEach { $0.applyViewUpdates(for: self, position: .start) }
+        applyTransforms()
+        
+        let applyClosure = {
+            self.animations.forEach { $0.applyViewUpdates(for: self, position: .end) }
             self.applyTransforms()
+        }
+        
+        guard !noAnimate else {
+            applyClosure()
+            group.leave()
+            return
+        }
+        
+        animate(animations: {
+            applyClosure()
         }) {
             self.group.leave()
         }
@@ -244,6 +279,13 @@ public class AnimatingContext: NSObject {
         guard let target = target, hasLayerAnimations else { return }
         
         group.enter()
+        
+        animations.forEach { $0.applyLayerUpdates(for: self) }
+        
+        guard !noAnimate else {
+            group.leave()
+            return
+        }
         
         let group = CAAnimationGroup()
         group.animations = layerAnimations
@@ -263,11 +305,16 @@ public class AnimatingContext: NSObject {
         
         group.enter()
         
+        animations.forEach { $0.applyCustomUpdates(for: self) }
+        
         customAnimations.forEach { animation in
+            self.group.enter()
             animation {
                 self.group.leave()
             }
         }
+        
+        group.leave()
     }
     
     func persist(breadcrumb: @escaping () -> ()) {
@@ -278,6 +325,15 @@ public class AnimatingContext: NSObject {
     func reset(breadcrumb: @escaping () -> ()) {
         guard removeOnCompletion else { return }
         breadcrumbs.append(breadcrumb)
+    }
+    
+    func walk(reverse: Bool = false, visitor: (AnimatingContext) -> ()) {
+        var ctx: AnimatingContext? = self
+        while ctx != nil {
+            guard let c = ctx else { break }
+            visitor(c)
+            ctx = reverse ? c.prev : c.next
+        }
     }
     
 }
@@ -294,9 +350,10 @@ extension AnimatingContext: Animating {
     
     private func add(_ animations: [AnimatingType], _ options: [AnimatingOption], _ completion: (() -> ())?) -> AnimatingContext {
         guard let target = target else { fatalError() }
-        next = AnimatingContext(animations, target: target, options: options, completion: completion)
-        next?.prev = self
-        return next!
+        let next = AnimatingContext(animations, target: target, options: options, completion: completion)
+        self.next = next
+        next.prev = self
+        return next
     }
     
     @discardableResult public func animate(animations: [AnimatingType], options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {
@@ -427,12 +484,16 @@ extension AnimatingContext: Animating {
         add([.boing], options, completion)
     }
     
-    @discardableResult public func delay(time: TimeInterval, completion: (() -> ())? = nil) -> AnimatingContext {
+    @discardableResult public func delay(time: TimeInterval = 0.7, completion: (() -> ())? = nil) -> AnimatingContext {
         add([.delay(time)], [], completion)
     }
     
-    @discardableResult public func identity(time: TimeInterval, completion: (() -> ())? = nil) -> AnimatingContext {
+    @discardableResult public func identity(time: TimeInterval = 0.7, completion: (() -> ())? = nil) -> AnimatingContext {
         add([.identity(time)], [], completion)
+    }
+    
+    @discardableResult public func now(completion: (() -> ())? = nil) -> AnimatingContext {
+        add([.now], [], completion)
     }
     
 }

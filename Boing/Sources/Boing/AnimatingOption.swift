@@ -19,17 +19,27 @@ import UIKit
 /// that execution of the animation.
 public enum AnimatingOption: CaseIterable {
     
+    /// delay before next animation
     case delay(TimeInterval)
+    /// duration of the animation
     case duration(TimeInterval)
+    /// curve to use for the animation
     case curve(AnimatingCurve)
+    /// damping value to use for the animation
     case damping(CGFloat)
+    /// velocity of the animation
     case velocity(CGFloat)
+    /// number of times to repeat the animation
     case repeatCount(Float)
+    /// whether to reverse the animation at the end
     case autoreverse(Bool)
+    /// whether to persist transforms or remove at the end
     case removeOnCompletion(Bool)
+    /// whether to apply transforms only without animation
+    case noAnimate(Bool)
     
     public static var allCases: [AnimatingOption] {
-        return [.delay(0), .duration(0), .curve(.easeInOut), .damping(0), .velocity(0), .repeatCount(0), .autoreverse(false), .removeOnCompletion(true)]
+        return [.delay(0), .duration(0), .curve(.easeInOut), .damping(0), .velocity(0), .repeatCount(0), .autoreverse(false), .removeOnCompletion(true), .noAnimate(false)]
     }
     
 }
@@ -47,6 +57,7 @@ extension AnimatingOption: Nameable {
         case .repeatCount: return "repeatCount"
         case .autoreverse: return "autoreverse"
         case .removeOnCompletion: return "removeOnCompletion"
+        case .noAnimate: return "noAnimate"
         }
     }
     

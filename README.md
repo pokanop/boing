@@ -54,6 +54,7 @@ velocity(CGFloat)
 repeatCount(Float)
 autoreverse(Bool)
 removeOnCompletion(Bool)
+noAnimate(Bool)
 ```
 
 > Note that by default animations persist, or `removeOnCompletion` is false.
@@ -99,6 +100,7 @@ Boing also provides utility methods and animations including:
 ```swift
 delay(time)
 identity(time)
+now
 ```
 
 ### Coalesced Animations
@@ -125,6 +127,26 @@ view
   .alpha(0.5)
   .wobble()
 ```
+
+### Immediate Transforms
+
+Boing also provides the `noAnimate` option that can be provided with any animation. This skips the animation and applies any transforms immediately.
+```swift
+view
+  .cornerRadius(20.0, options: [.noAnimate(true)])
+  .animate(animations: [.borderWidth(4.0), .borderColor(.red)])
+```
+
+Along with that, another utility can be used to apply changes without animation with `now()`:
+```swift
+view
+  .scale(x: 0.5, y: 0.5)
+  .rotate(45.0)
+  .backgroundColor(.green)
+  .now()
+```
+
+These tools allow you to use Boing not only for animation, but also for standard view and layer transforms!
 
 ## Demo
 

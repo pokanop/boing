@@ -20,6 +20,7 @@ class AnimatingRegistry {
         animation.registrationID = uuid
         animations[uuid] = animation
         animation.target?.isUserInteractionEnabled = false
+        animation.preprocess()
         animation.animate()
     }
     

@@ -58,16 +58,32 @@ public enum AnimatingType {
     // Utilities
     case delay(TimeInterval)
     case identity(TimeInterval)
+    case now
     
     var isViewAnimation: Bool {
         switch self {
         case .translate, .scale, .rotate, .backgroundColor, .cornerRadius, .alpha, .frame, .bounds, .center, .size, .fadeIn, .fadeOut, .zoomIn, .zoomOut, .slide, .fall: return true
         case .squeeze(let direction): return direction != .none
-        case .borderColor, .borderWidth, .shadowColor, .shadowOffset, .shadowOpacity, .shadowRadius, .shake, .pop, .flip, .morph, .flash, .wobble, .swing, .boing, .delay, .identity: return false
+        default: return false
         }
     }
     
-    func apply(_ context: AnimatingContext, position: AnimatingPosition) {
+    var isLayerAnimation: Bool {
+        switch self {
+        case .borderColor, .borderWidth, .shadowColor, .shadowOffset, .shadowOpacity, .shadowRadius, .shake, .pop, .flip, .morph, .flash, .wobble, .swing: return true
+        case .squeeze(let direction): return direction == .none
+        default: return false
+        }
+    }
+    
+    var isCustomAnimation: Bool {
+        switch self {
+        case .boing, .delay, .identity, .now: return true
+        default: return false
+        }
+    }
+    
+    func applyViewUpdates(for context: AnimatingContext, position: AnimatingPosition) {
         guard let target = context.target else {
             assertionFailure("Animation context cannot have nil target")
             return
@@ -76,54 +92,6 @@ public enum AnimatingType {
         switch position {
         case .start:
             switch self {
-            case .borderColor(let color):
-                let animation = CABasicAnimation()
-                animation.keyPath = "borderColor"
-                animation.toValue = color.cgColor
-                context.persist {
-                    target.layer.borderColor = color.cgColor
-                }
-                context.layerAnimations.append(animation)
-            case .borderWidth(let width):
-                let animation = CABasicAnimation()
-                animation.keyPath = "borderWidth"
-                animation.toValue = width
-                context.persist {
-                    target.layer.borderWidth = width
-                }
-                context.layerAnimations.append(animation)
-            case .shadowColor(let color):
-                let animation = CABasicAnimation()
-                animation.keyPath = "shadowColor"
-                animation.toValue = color.cgColor
-                context.persist {
-                    target.layer.shadowColor = color.cgColor
-                }
-                context.layerAnimations.append(animation)
-            case .shadowOffset(let offset):
-                let animation = CABasicAnimation()
-                animation.keyPath = "shadowOffset"
-                animation.toValue = offset
-                context.persist {
-                    target.layer.shadowOffset = offset
-                }
-                context.layerAnimations.append(animation)
-            case .shadowOpacity(let opacity):
-                let animation = CABasicAnimation()
-                animation.keyPath = "shadowOpacity"
-                animation.toValue = opacity
-                context.persist {
-                    target.layer.shadowOpacity = Float(opacity)
-                }
-                context.layerAnimations.append(animation)
-            case .shadowRadius(let radius):
-                let animation = CABasicAnimation()
-                animation.keyPath = "shadowRadius"
-                animation.toValue = radius
-                context.persist {
-                    target.layer.shadowRadius = radius
-                }
-                context.layerAnimations.append(animation)
             case .fadeIn(let direction):
                 let original = target.alpha
                 context.reset {
@@ -150,108 +118,7 @@ public enum AnimatingType {
                     target.alpha = original
                 }
                 context.alpha = 1.0
-            case .shake:
-                let animation = CAKeyframeAnimation()
-                animation.keyPath = "position.x"
-                animation.values = [0, 30, -30, 30, 0]
-                animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
-                animation.isAdditive = true
-                context.layerAnimations.append(animation)
-            case .pop:
-                let animation = CAKeyframeAnimation()
-                animation.keyPath = "transform.scale"
-                animation.values = [0, 0.2, -0.2, 0.2, 0]
-                animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
-                animation.isAdditive = true
-                context.layerAnimations.append(animation)
-            case .flip(let direction):
-                var perspective = CATransform3DIdentity
-                perspective.m34 = -1.0 / target.layer.frame.size.width / 2
-                
-                let animation = CABasicAnimation()
-                animation.keyPath = "transform"
-                animation.fromValue = NSValue(caTransform3D: CATransform3DMakeRotation(0, 0, 0, 0))
-                animation.toValue = NSValue(caTransform3D: CATransform3DConcat(perspective, direction.transform(for: self)))
-                context.layerAnimations.append(animation)
-            case .morph:
-                var animation = CAKeyframeAnimation()
-                animation.keyPath = "transform.scale.x"
-                animation.values = [1, 1.3, 0.7, 1.3, 1]
-                animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
-                context.layerAnimations.append(animation)
-                
-                animation = CAKeyframeAnimation()
-                animation.keyPath = "transform.scale.y"
-                animation.values = [1, 0.7, 1.3, 0.7, 1]
-                animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
-                context.layerAnimations.append(animation)
-            case .squeeze(let direction):
-                guard direction == .none else { return }
-                
-                var animation = CAKeyframeAnimation()
-                animation.keyPath = "transform.scale.x"
-                animation.values = [1, 1.5, 0.5, 1.5, 1]
-                animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
-                context.layerAnimations.append(animation)
-                
-                animation = CAKeyframeAnimation()
-                animation.keyPath = "transform.scale.y"
-                animation.values = [1, 0.5, 1, 0.5, 1]
-                animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
-                context.layerAnimations.append(animation)
-            case .flash:
-                let animation = CABasicAnimation()
-                animation.keyPath = "opacity"
-                animation.fromValue = 1
-                animation.toValue = 0
-                animation.autoreverses = true
-                context.repeatCount *= 2
-                context.layerAnimations.append(animation)
-            case .wobble:
-                var animation = CAKeyframeAnimation()
-                animation.keyPath = "transform.rotation"
-                animation.values = [0, 0.3, -0.3, 0.3, 0]
-                animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
-                animation.isAdditive = true
-                context.layerAnimations.append(animation)
-                
-                animation = CAKeyframeAnimation()
-                animation.keyPath = "position.x"
-                animation.values = [0, 30, -30, 30, 0]
-                animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
-                animation.isAdditive = true
-                context.layerAnimations.append(animation)
-            case .swing:
-                let animation = CAKeyframeAnimation()
-                animation.keyPath = "transform.rotation"
-                animation.values = [0, 0.3, -0.3, 0.3, 0]
-                animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
-                animation.isAdditive = true
-                context.layerAnimations.append(animation)
-            case .boing:
-                context.customAnimations.append { completion in
-                    context.animate(duration: context.duration / 8, delay: 0, damping: 1, velocity: 0, options: [.beginFromCurrentState, context.curve.asOptions()], animations: {
-                        target.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
-                    }) {
-                        context.animate(duration: 7 * context.duration / 8, animations: {
-                            target.transform = .identity
-                        }, completion: completion)
-                    }
-                }
-            case .delay(let time):
-                context.customAnimations.append({ completion in
-                    DispatchQueue.main.asyncAfter(deadline: .now() + time) {
-                        completion?()
-                    }
-                })
-            case .identity(let time):
-                context.customAnimations.append({ completion in
-                    UIView.animate(withDuration: time) {
-                        target.transform = .identity
-                        target.layer.transform = CATransform3DIdentity
-                    }
-                })
-            case .translate, .scale, .rotate, .backgroundColor, .cornerRadius, .alpha, .frame, .bounds, .center, .size, .slide, .fall:
+            default:
                 break
             }
         case .end:
@@ -326,9 +193,201 @@ public enum AnimatingType {
             case .fall:
                 context.translation = CGPoint(x: 0, y: 400)
                 context.rotation = 45
-            case .borderColor, .borderWidth, .shadowColor, .shadowOffset, .shadowOpacity, .shadowRadius, .shake, .pop, .flip, .morph, .flash, .wobble, .swing, .boing, .delay, .identity:
+            default:
                 break
             }
+        }
+    }
+    
+    func applyLayerUpdates(for context: AnimatingContext) {
+        guard let target = context.target else {
+            assertionFailure("Animation context cannot have nil target")
+            return
+        }
+        
+        switch self {
+        case .borderColor(let color):
+            let animation = CABasicAnimation()
+            animation.keyPath = "borderColor"
+            animation.toValue = color.cgColor
+            context.persist {
+                target.layer.borderColor = color.cgColor
+            }
+            context.layerAnimations.append(animation)
+        case .borderWidth(let width):
+            let animation = CABasicAnimation()
+            animation.keyPath = "borderWidth"
+            animation.toValue = width
+            context.persist {
+                target.layer.borderWidth = width
+            }
+            context.layerAnimations.append(animation)
+        case .shadowColor(let color):
+            let animation = CABasicAnimation()
+            animation.keyPath = "shadowColor"
+            animation.toValue = color.cgColor
+            context.persist {
+                target.layer.shadowColor = color.cgColor
+            }
+            context.layerAnimations.append(animation)
+        case .shadowOffset(let offset):
+            let animation = CABasicAnimation()
+            animation.keyPath = "shadowOffset"
+            animation.toValue = offset
+            context.persist {
+                target.layer.shadowOffset = offset
+            }
+            context.layerAnimations.append(animation)
+        case .shadowOpacity(let opacity):
+            let animation = CABasicAnimation()
+            animation.keyPath = "shadowOpacity"
+            animation.toValue = opacity
+            context.persist {
+                target.layer.shadowOpacity = Float(opacity)
+            }
+            context.layerAnimations.append(animation)
+        case .shadowRadius(let radius):
+            let animation = CABasicAnimation()
+            animation.keyPath = "shadowRadius"
+            animation.toValue = radius
+            context.persist {
+                target.layer.shadowRadius = radius
+            }
+            context.layerAnimations.append(animation)
+        case .shake:
+            let animation = CAKeyframeAnimation()
+            animation.keyPath = "position.x"
+            animation.values = [0, 30, -30, 30, 0]
+            animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
+            animation.isAdditive = true
+            context.layerAnimations.append(animation)
+        case .pop:
+            let animation = CAKeyframeAnimation()
+            animation.keyPath = "transform.scale"
+            animation.values = [0, 0.2, -0.2, 0.2, 0]
+            animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
+            animation.isAdditive = true
+            context.layerAnimations.append(animation)
+        case .flip(let direction):
+            var perspective = CATransform3DIdentity
+            perspective.m34 = -1.0 / target.layer.frame.size.width / 2
+            
+            let animation = CABasicAnimation()
+            animation.keyPath = "transform"
+            animation.fromValue = NSValue(caTransform3D: CATransform3DMakeRotation(0, 0, 0, 0))
+            animation.toValue = NSValue(caTransform3D: CATransform3DConcat(perspective, direction.transform(for: self)))
+            context.layerAnimations.append(animation)
+        case .morph:
+            var animation = CAKeyframeAnimation()
+            animation.keyPath = "transform.scale.x"
+            animation.values = [1, 1.3, 0.7, 1.3, 1]
+            animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
+            context.layerAnimations.append(animation)
+            
+            animation = CAKeyframeAnimation()
+            animation.keyPath = "transform.scale.y"
+            animation.values = [1, 0.7, 1.3, 0.7, 1]
+            animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
+            context.layerAnimations.append(animation)
+        case .squeeze(let direction):
+            guard direction == .none else { return }
+            
+            var animation = CAKeyframeAnimation()
+            animation.keyPath = "transform.scale.x"
+            animation.values = [1, 1.5, 0.5, 1.5, 1]
+            animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
+            context.layerAnimations.append(animation)
+            
+            animation = CAKeyframeAnimation()
+            animation.keyPath = "transform.scale.y"
+            animation.values = [1, 0.5, 1, 0.5, 1]
+            animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
+            context.layerAnimations.append(animation)
+        case .flash:
+            let animation = CABasicAnimation()
+            animation.keyPath = "opacity"
+            animation.fromValue = 1
+            animation.toValue = 0
+            animation.autoreverses = true
+            context.repeatCount *= 2
+            context.layerAnimations.append(animation)
+        case .wobble:
+            var animation = CAKeyframeAnimation()
+            animation.keyPath = "transform.rotation"
+            animation.values = [0, 0.3, -0.3, 0.3, 0]
+            animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
+            animation.isAdditive = true
+            context.layerAnimations.append(animation)
+            
+            animation = CAKeyframeAnimation()
+            animation.keyPath = "position.x"
+            animation.values = [0, 30, -30, 30, 0]
+            animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
+            animation.isAdditive = true
+            context.layerAnimations.append(animation)
+        case .swing:
+            let animation = CAKeyframeAnimation()
+            animation.keyPath = "transform.rotation"
+            animation.values = [0, 0.3, -0.3, 0.3, 0]
+            animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
+            animation.isAdditive = true
+            context.layerAnimations.append(animation)
+        default:
+            break
+        }
+    }
+    
+    func applyCustomUpdates(for context: AnimatingContext) {
+        guard let target = context.target else {
+            assertionFailure("Animation context cannot have nil target")
+            return
+        }
+        
+        switch self {
+        case .boing:
+            context.customAnimations.append { completion in
+                context.animate(duration: context.duration / 8, delay: 0, damping: 1, velocity: 0, options: [.beginFromCurrentState, context.curve.asOptions()], animations: {
+                    target.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
+                }) {
+                    context.animate(duration: 7 * context.duration / 8, animations: {
+                        target.transform = .identity
+                    }, completion: completion)
+                }
+            }
+        case .delay(let time):
+            context.customAnimations.append { completion in
+                guard !context.noAnimate else {
+                    completion?()
+                    return
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + time) {
+                    completion?()
+                }
+            }
+        case .identity(let time):
+            context.customAnimations.append { completion in
+                let transform = target.transform
+                let layerTransform = target.layer.transform
+                context.reset {
+                    target.transform = transform
+                    target.layer.transform = layerTransform
+                }
+                guard !context.noAnimate else {
+                    target.transform = .identity
+                    target.layer.transform = CATransform3DIdentity
+                    completion?()
+                    return
+                }
+                context.animate(duration: time, delay: 0, damping: 1, velocity: 0, options: [.beginFromCurrentState, context.curve.asOptions()], animations: {
+                    target.transform = .identity
+                    target.layer.transform = CATransform3DIdentity
+                }, completion: completion)
+            }
+        case .now:
+            break
+        default:
+            break
         }
     }
     
@@ -371,6 +430,7 @@ extension AnimatingType: Nameable {
         case .boing: return "boing"
         case .delay: return "delay"
         case .identity: return "identity"
+        case .now: return "now"
         }
     }
     
@@ -379,7 +439,7 @@ extension AnimatingType: Nameable {
 extension AnimatingType: CaseIterable {
     
     public static var allCases: [AnimatingType] {
-        return [.translate(0, 0), .scale(0, 0), .rotate(0), .backgroundColor(.clear), .cornerRadius(0), .alpha(0), .frame(.zero), .bounds(.zero), .center(.zero), .size(.zero), .borderColor(.clear), .borderWidth(0), .shadowColor(.clear), .shadowOffset(.zero), .shadowOpacity(0), .shadowRadius(0), .fadeIn(.none), .fadeOut(.none), .slide(.none), .squeeze(.none), .zoomIn, .zoomOut, .fall, .shake, .pop, .flip(.none), .morph, .flash, .wobble, .swing, .boing]
+        return [.translate(0, 0), .scale(0, 0), .rotate(0), .backgroundColor(.clear), .cornerRadius(0), .alpha(0), .frame(.zero), .bounds(.zero), .center(.zero), .size(.zero), .borderColor(.clear), .borderWidth(0), .shadowColor(.clear), .shadowOffset(.zero), .shadowOpacity(0), .shadowRadius(0), .fadeIn(.none), .fadeOut(.none), .slide(.none), .squeeze(.none), .zoomIn, .zoomOut, .fall, .shake, .pop, .flip(.none), .morph, .flash, .wobble, .swing, .boing, .delay(0), .identity(0), .now]
     }
     
 }
@@ -474,6 +534,7 @@ extension AnimatingType: Hashable {
             hasher.combine("boing")
         case .delay: hasher.combine("delay")
         case .identity: hasher.combine("identity")
+        case .now: hasher.combine("now")
         }
     }
     
