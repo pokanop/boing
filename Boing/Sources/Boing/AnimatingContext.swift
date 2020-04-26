@@ -368,8 +368,12 @@ extension AnimatingContext: Animating {
         add([.scale(x, y)], options, completion)
     }
     
-    @discardableResult public func rotate(angle: CGFloat, options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {
+    @discardableResult public func rotate(_ angle: CGFloat, options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {
         add([.rotate(angle)], options, completion)
+    }
+    
+    @discardableResult public func anchorPoint(_ point: CGPoint, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        add([.anchorPoint(point)], options, completion)
     }
     
     @discardableResult public func backgroundColor(_ color: UIColor, options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {
@@ -422,6 +426,14 @@ extension AnimatingContext: Animating {
     
     @discardableResult public func shadowRadius(_ radius: CGFloat, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
         add([.shadowRadius(radius)], options, completion)
+    }
+    
+    @discardableResult public func transform(_ transform: CGAffineTransform, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        add([.transform(transform)], options, completion)
+    }
+    
+    @discardableResult public func layerTransform(_ transform: CATransform3D, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        add([.layerTransform(transform)], options, completion)
     }
     
     @discardableResult public func fadeIn(direction: AnimatingDirection = .none, options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {

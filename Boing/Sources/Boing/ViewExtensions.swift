@@ -25,8 +25,12 @@ extension UIView: Animating {
         return AnimatingContext([.scale(x, y)], target: self, options: options, completion: completion)
     }
     
-    @discardableResult public func rotate(angle: CGFloat, options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {
+    @discardableResult public func rotate(_ angle: CGFloat, options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {
         return AnimatingContext([.rotate(angle)], target: self, options: options, completion: completion)
+    }
+    
+    @discardableResult public func anchorPoint(_ point: CGPoint, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        return AnimatingContext([.anchorPoint(point)], target: self, options: options, completion: completion)
     }
     
     @discardableResult public func backgroundColor(_ color: UIColor, options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {
@@ -79,6 +83,14 @@ extension UIView: Animating {
     
     @discardableResult public func shadowRadius(_ radius: CGFloat, options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {
         return AnimatingContext([.shadowRadius(radius)], target: self, options: options, completion: completion)
+    }
+    
+    @discardableResult public func transform(_ transform: CGAffineTransform, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        return AnimatingContext([.transform(transform)], target: self, options: options, completion: completion)
+    }
+    
+    @discardableResult public func layerTransform(_ transform: CATransform3D, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext {
+        return AnimatingContext([.layerTransform(transform)], target: self, options: options, completion: completion)
     }
     
     @discardableResult public func fadeIn(direction: AnimatingDirection = .none, options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {

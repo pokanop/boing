@@ -64,7 +64,15 @@ public protocol Animating {
     ///   - angle: The angle in degrees for the rotation.
     ///   - options: The options to apply to this animation.
     ///   - completion: A completion handler to be exected after the animation is finished.
-    @discardableResult func rotate(angle: CGFloat, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
+    @discardableResult func rotate(_ angle: CGFloat, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
+    
+    /// Change the anchor point in an animation.
+    ///
+    /// - Parameters:
+    ///   - point: The final anchor point to modify.
+    ///   - options: The options to apply to this animation.
+    ///   - completion: A completion handler to be exected after the animation is finished.
+    @discardableResult func anchorPoint(_ point: CGPoint, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
     
     /// Modify the background color of content in an animation.
     ///
@@ -169,6 +177,22 @@ public protocol Animating {
     ///   - options: The options to apply to this animation.
     ///   - completion: A completion handler to be exected after the animation is finished.
     @discardableResult func shadowRadius(_ radius: CGFloat, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
+    
+    /// Modify the transform for content in an animation.
+    ///
+    /// - Parameters:
+    ///   - transform: The desired transform for the content.
+    ///   - options: The options to apply to this animation.
+    ///   - completion: A completion handler to be exected after the animation is finished.
+    @discardableResult func transform(_ transform: CGAffineTransform, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
+    
+    /// Modify the layer transform for content in an animation.
+    ///
+    /// - Parameters:
+    ///   - transform: The desired layer transform for the content.
+    ///   - options: The options to apply to this animation.
+    ///   - completion: A completion handler to be exected after the animation is finished.
+    @discardableResult func layerTransform(_ transform: CATransform3D, options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
     
     // MARK: - Preset animations
     
