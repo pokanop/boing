@@ -2,7 +2,6 @@
 //  PresetButton.swift
 //  Demo
 //
-//  Created by Sahel Jalal on 2/23/20.
 //  Copyright © 2020 Pokanop Apps. All rights reserved.
 //
 
