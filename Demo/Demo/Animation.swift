@@ -9,7 +9,7 @@ import SwiftUI
 import Boing
 
 enum AnimationTypeProperty {
-    case none, direction, float, point, size, rect, color, interval
+    case none, direction, float, point, size, rect, color, interval, toggle
 }
 
 class AnimationType: ObservableObject, Identifiable, CaseIterable, Hashable {
@@ -22,6 +22,7 @@ class AnimationType: ObservableObject, Identifiable, CaseIterable, Hashable {
     @Published var rect: CGRect = .zero
     @Published var color: Color = .black
     @Published var interval: TimeInterval = 0
+    @Published var toggle: Bool = false
     
     static var allCases: [AnimationType] {
         AnimatingType.allCases.map { AnimationType(type: $0) }
@@ -46,14 +47,14 @@ class AnimationType: ObservableObject, Identifiable, CaseIterable, Hashable {
     
     var associatedProperty: AnimationTypeProperty {
         switch type {
-        case .translate, .scale, .center: return .point
+        case .translate, .scale, .center, .anchorPoint: return .point
         case .size, .shadowOffset: return .size
         case .rotate, .alpha, .cornerRadius, .borderWidth, .shadowOpacity, .shadowRadius: return .float
         case .backgroundColor, .borderColor, .shadowColor: return .color
         case .frame, .bounds: return .rect
         case .fadeIn, .fadeOut, .slide, .squeeze, .flip: return .direction
         case .delay, .identity: return .interval
-        case .zoomIn, .zoomOut, .fall, .shake, .pop, .morph, .flash, .wobble, .swing, .boing, .now: return .none
+        case .zoomIn, .zoomOut, .fall, .shake, .pop, .morph, .flash, .wobble, .swing, .boing, .now, .transform, .layerTransform: return .none
         }
     }
     
@@ -63,6 +64,7 @@ class AnimationType: ObservableObject, Identifiable, CaseIterable, Hashable {
         case .scale: return .scale(point.x, point.y)
         case .center: return .center(point)
         case .rotate: return .rotate(float)
+        case .anchorPoint: return .anchorPoint(point)
         case .backgroundColor: return .backgroundColor(color.uiColor)
         case .cornerRadius: return .cornerRadius(float)
         case .alpha: return .alpha(float)
@@ -82,6 +84,8 @@ class AnimationType: ObservableObject, Identifiable, CaseIterable, Hashable {
         case .shadowOffset: return .shadowOffset(size)
         case .shadowOpacity: return .shadowOpacity(float)
         case .shadowRadius: return .shadowRadius(float)
+        case .transform: return .transform(.identity)
+        case .layerTransform: return .layerTransform(CATransform3DIdentity)
         case .zoomIn, .zoomOut, .fall, .shake, .pop, .morph, .flash, .wobble, .swing, .boing, .now: return type
         }
     }

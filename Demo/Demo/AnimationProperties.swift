@@ -101,6 +101,10 @@ struct AnimationProperties: View {
                     get: { "\(self.animation.interval)" },
                     set: { self.animation.interval = TimeInterval(truncating: NumberFormatter().number(from: $0) ?? 0) }
                 ))
+            } else if animation.associatedProperty == .toggle {
+                Toggle(isOn: $animation.toggle) {
+                    Text("toggle")
+                }
             }
         }
     }

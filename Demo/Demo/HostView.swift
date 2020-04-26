@@ -40,6 +40,7 @@ struct HostView: UIViewRepresentable {
             uiView.layer.shadowOpacity = 0
             uiView.layer.shadowOffset = .zero
             uiView.layer.shadowColor = UIColor.black.cgColor
+            uiView.layer.masksToBounds = false
             self.isAnimating = false
             self.store.defaultAnimation = nil
         }
@@ -47,7 +48,8 @@ struct HostView: UIViewRepresentable {
         switch type {
         case .translate: uiView.translate(x: 100, y: 100, options: options, completion: completion)
         case .scale: uiView.scale(x: 1.3, y: 1.3, options: options, completion: completion)
-        case .rotate: uiView.rotate(angle: 90, options: options, completion: completion)
+        case .rotate: uiView.rotate(90, options: options, completion: completion)
+        case .anchorPoint: uiView.anchorPoint(.zero, options: options, completion: completion)
         case .backgroundColor: uiView.backgroundColor(.blue, options: options, completion: completion)
         case .cornerRadius: uiView.cornerRadius(100, options: options, completion: completion)
         case .alpha: uiView.alpha(0.5, options: options, completion: completion)
@@ -82,6 +84,8 @@ struct HostView: UIViewRepresentable {
             uiView.layer.shadowOpacity = 1.0
             uiView.layer.shadowRadius = 1.0
             uiView.shadowRadius(100, options: options + [.duration(1.2)], completion: completion)
+        case .transform: uiView.transform(CGAffineTransform(rotationAngle: 45).scaledBy(x: 1.2, y: 1.2).translatedBy(x: -10, y: 20), options: options, completion: completion)
+        case .layerTransform: uiView.layerTransform(CATransform3DMakeScale(1.5, 1.2, 1.3), options: options, completion: completion)
         case .fadeIn: uiView.fadeIn(options: options, completion: completion)
         case .fadeOut: uiView.fadeOut(options: options, completion: completion)
         case .slide: uiView.slide(direction: .left, options: options, completion: completion)
