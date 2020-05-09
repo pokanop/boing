@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "Boing"
-  spec.version      = "0.7.4"
+  spec.version      = "0.8.0"
   spec.summary      = "A simple and powerful animation API for views in Swift."
 
   # This description is used to generate tags and improve search results.
@@ -89,7 +89,7 @@ Pod::Spec.new do |spec|
   #  Not including the public_header_files will make all headers public.
   #
 
-  spec.source_files  = "Boing/Sources/**/*.{swift}"
+  spec.source_files  = "Sources/**/*.{swift}"
   # spec.exclude_files = "Classes/Exclude"
 
   # spec.public_header_files = "Classes/**/*.h"
