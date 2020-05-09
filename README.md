@@ -11,15 +11,20 @@ Boing is a simple and powerful animation API for views written in Swift. Inspire
 
 ### Swift Package Manager
 
+From Xcode, go to the menu item `File -> Swift Packages` and select `Add Package Dependency`. Paste in this github location into the text field and proceed to add the target into your project.
+
 ### Cocoapods
 
 Update your [`Podfile`](https://cocoapods.org/) and run `pod install`:
+
 ```ruby
 pod 'Boing'
 ```
 
 ### Carthage
+
 Update your [`Cartfile`](https://github.com/Carthage/Carthage) and run `carthage update`:
+
 ```
 github "pokanop/boing"
 ```
@@ -45,6 +50,7 @@ view.boing(options: [.duration(0.3)]) {
 ```
 
 The available options include:
+
 ```swift
 delay(TimeInterval)
 duration(TimeInterval)
@@ -62,6 +68,7 @@ noAnimate(Bool)
 ### Animation Types
 
 Boing provides several basic and preset animations including:
+
 ```swift
 translate(CGFloat, CGFloat)
 scale(CGFloat, CGFloat)
@@ -100,6 +107,7 @@ boing
 ```
 
 Boing also provides utility methods and animations including:
+
 ```swift
 delay(time)
 identity(time)
@@ -111,6 +119,7 @@ now
 For a single animation context, the library coalesces or combines several animations together. It runs them using the same animation options like `duration` and `delay`.
 
 You can run combined animations using the `animate()` method as follows:
+
 ```swift
 view.animate(
   animations: [.boing, .backgroundColor(.blue)],
@@ -123,6 +132,7 @@ view.animate(
 In addition to being able to combine or coalesce animations, Boing allows you to also chain in a simple builder style API call.
 
 You can chain several animations to execute sequentially with:
+
 ```swift
 view
   .boing()
@@ -134,6 +144,7 @@ view
 ### Immediate Transforms
 
 Boing also provides the `noAnimate` option that can be provided with any animation. This skips the animation and applies any transforms immediately.
+
 ```swift
 view
   .cornerRadius(20.0, options: [.noAnimate(true)])
@@ -141,6 +152,7 @@ view
 ```
 
 Along with that, another utility can be used to apply changes without animation with `now()`:
+
 ```swift
 view
   .scale(x: 0.5, y: 0.5)
@@ -166,12 +178,14 @@ And then open the workspace at `Demo/Demo.xcworkpace` to run the application.
 ## Credits
 
 This project was heavily inspired and lifted learnings by these wonderful projects:
+
 - [Spring](https://github.com/MengTo/Spring)
 - [Fluent](https://github.com/matthewcheok/Fluent)
 - [Cheetah](https://github.com/suguru/Cheetah)
 - [Wobbly](https://github.com/sagaya/wobbly)
 
 ## Contibuting
+
 Contributions are what makes the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 1. Fork the Project
@@ -181,4 +195,5 @@ Contributions are what makes the open-source community such an amazing place to 
 5. Open a Pull Request
 
 ## License
+
 Distributed under the MIT License.
