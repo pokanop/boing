@@ -57,6 +57,7 @@ public enum AnimatingType {
     case wobble
     case swing
     case boing
+    case bounce
     
     // Utilities
     case delay(TimeInterval)
@@ -73,7 +74,7 @@ public enum AnimatingType {
     
     var isLayerAnimation: Bool {
         switch self {
-        case .anchorPoint, .borderColor, .borderWidth, .shadowColor, .shadowOffset, .shadowOpacity, .shadowRadius, .layerTransform, .shake, .pop, .flip, .morph, .flash, .wobble, .swing: return true
+        case .anchorPoint, .borderColor, .borderWidth, .shadowColor, .shadowOffset, .shadowOpacity, .shadowRadius, .layerTransform, .shake, .pop, .flip, .morph, .flash, .wobble, .swing, .bounce: return true
         case .squeeze(let direction): return direction == .none
         default: return false
         }
@@ -301,6 +302,26 @@ public enum AnimatingType {
             animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
             animation.isAdditive = true
             context.layerAnimations.append(animation)
+        case .bounce:
+            let keyTimes: [NSNumber] = [0.222, 0.444, 0.478, 0.589, 0.778, 0.889, 0.98, 1.0]
+            let fn1 = CAMediaTimingFunction(controlPoints: 0.215, 0.61, 0.355, 1)
+            let fn2 = CAMediaTimingFunction(controlPoints: 0.755, 0.05, 0.855, 0.06)
+            let fns = [fn1, fn2, fn2, fn1, fn2, fn1]
+            
+            let translate = CAKeyframeAnimation()
+            translate.keyPath = "position.y"
+            let y = target.center.y
+            translate.values = [y, y - 30, y - 30, y, y - 15, y, y - 4, y]
+            translate.keyTimes = keyTimes
+            translate.timingFunctions = fns
+            context.layerAnimations.append(translate)
+            
+            let scale = CAKeyframeAnimation()
+            scale.keyPath = "scale.y"
+            scale.values = [1.0, 1.1, 1.1, 1.0, 1.05, 0.95, 1.02, 1.0]
+            scale.keyTimes = keyTimes
+            scale.timingFunctions = fns
+            context.layerAnimations.append(scale)
         default:
             break
         }
@@ -413,6 +434,7 @@ extension AnimatingType: Nameable {
         case .wobble: return "wobble"
         case .swing: return "swing"
         case .boing: return "boing"
+        case .bounce: return "bounce"
         case .delay: return "delay"
         case .identity: return "identity"
         case .now: return "now"
@@ -424,7 +446,7 @@ extension AnimatingType: Nameable {
 extension AnimatingType: CaseIterable {
     
     public static var allCases: [AnimatingType] {
-        return [.translate(0, 0), .scale(0, 0), .rotate(0), .anchorPoint(.zero), .backgroundColor(.clear), .cornerRadius(0), .alpha(0), .frame(.zero), .bounds(.zero), .center(.zero), .size(.zero), .borderColor(.clear), .borderWidth(0), .shadowColor(.clear), .shadowOffset(.zero), .shadowOpacity(0), .shadowRadius(0), .transform(.identity), .layerTransform(CATransform3DIdentity), .fadeIn(.none), .fadeOut(.none), .slide(.none), .squeeze(.none), .zoomIn, .zoomOut, .fall, .shake, .pop, .flip(.none), .morph, .flash, .wobble, .swing, .boing, .delay(0), .identity(0), .now]
+        return [.translate(0, 0), .scale(0, 0), .rotate(0), .anchorPoint(.zero), .backgroundColor(.clear), .cornerRadius(0), .alpha(0), .frame(.zero), .bounds(.zero), .center(.zero), .size(.zero), .borderColor(.clear), .borderWidth(0), .shadowColor(.clear), .shadowOffset(.zero), .shadowOpacity(0), .shadowRadius(0), .transform(.identity), .layerTransform(CATransform3DIdentity), .fadeIn(.none), .fadeOut(.none), .slide(.none), .squeeze(.none), .zoomIn, .zoomOut, .fall, .shake, .pop, .flip(.none), .morph, .flash, .wobble, .swing, .boing, .bounce, .delay(0), .identity(0), .now]
     }
     
 }

@@ -480,7 +480,7 @@ extension AnimatingContext: Animating {
         add([.morph], options, completion)
     }
     
-    @discardableResult public func flash(options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {
+    @discardableResult public func flash(options: [AnimatingOption] = [.duration(0.5)], completion: (() -> ())? = nil) -> AnimatingContext {
         add([.flash], options, completion)
     }
     
@@ -494,6 +494,10 @@ extension AnimatingContext: Animating {
     
     @discardableResult public func boing(options: [AnimatingOption] = [.damping(0.2), .velocity(5)], completion: (() -> ())? = nil) -> AnimatingContext {
         add([.boing], options, completion)
+    }
+    
+    @discardableResult public func bounce(options: [AnimatingOption] = [.duration(1.5)], completion: (() -> ())? = nil) -> AnimatingContext {
+        add([.bounce], options, completion)
     }
     
     @discardableResult public func delay(time: TimeInterval = 0.7, completion: (() -> ())? = nil) -> AnimatingContext {

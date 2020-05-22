@@ -306,6 +306,13 @@ public protocol Animating {
     ///   - completion: A completion handler to be exected after the animation is finished.
     @discardableResult func boing(options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
     
+    /// Perform a bounce animation for content.
+    ///
+    /// - Parameters:
+    ///   - options: The options to apply to this animation.
+    ///   - completion: A completion handler to be exected after the animation is finished.
+    @discardableResult func bounce(options: [AnimatingOption], completion: (() -> ())?) -> AnimatingContext
+    
     // MARK: - Utilities
     
     /// Perform a delay in an animation sequence.

@@ -137,7 +137,7 @@ extension UIView: Animating {
         return AnimatingContext([.morph], target: self, options: options, completion: completion)
     }
     
-    @discardableResult public func flash(options: [AnimatingOption] = [], completion: (() -> ())? = nil) -> AnimatingContext {
+    @discardableResult public func flash(options: [AnimatingOption] = [.duration(0.5)], completion: (() -> ())? = nil) -> AnimatingContext {
         return AnimatingContext([.flash], target: self, options: options, completion: completion)
     }
     
@@ -151,6 +151,10 @@ extension UIView: Animating {
     
     @discardableResult public func boing(options: [AnimatingOption] = [.damping(0.2), .velocity(5)], completion: (() -> ())? = nil) -> AnimatingContext {
         return AnimatingContext([.boing], target: self, options: options, completion: completion)
+    }
+    
+    @discardableResult public func bounce(options: [AnimatingOption] = [.duration(1.5)], completion: (() -> ())? = nil) -> AnimatingContext {
+        return AnimatingContext([.bounce], target: self, options: options, completion: completion)
     }
     
     @discardableResult public func delay(time: TimeInterval = 0.7, completion: (() -> ())? = nil) -> AnimatingContext {
