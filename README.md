@@ -197,3 +197,7 @@ Contributions are what makes the open-source community such an amazing place to 
 ## License
 
 Distributed under the MIT License.
+
+## If You ♥️ What We Do
+
+<a href="https://www.buymeacoffee.com/pokanopapps" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="60" width="217"></a>
