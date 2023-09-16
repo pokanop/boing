@@ -12,7 +12,7 @@ enum AnimationTypeProperty {
     case none, direction, float, point, size, rect, color, interval, toggle
 }
 
-class AnimationType: ObservableObject, Identifiable, CaseIterable, Hashable {
+final class AnimationType: ObservableObject, Identifiable, CaseIterable, Hashable {
     
     @Published var type: AnimatingType = .boing
     @Published var direction: AnimatingDirection = .none

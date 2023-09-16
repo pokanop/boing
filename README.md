@@ -1,9 +1,9 @@
-# [![Boing](https://github.com/pokanop/Boing/blob/master/Images/boing.png?raw=true)](#)
+# [![Boing](https://github.com/pokanop/Boing/blob/main/Images/boing.png?raw=true)](#)
 
-[![Build Status](https://travis-ci.org/pokanop/boing.svg?branch=master)](https://travis-ci.org/pokanop/boing)
+[![Build Status](https://travis-ci.org/pokanop/boing.svg?branch=main)](https://travis-ci.org/pokanop/boing)
 [![Version](https://img.shields.io/cocoapods/v/Boing.svg?style=flat)](http://cocoapods.org/pods/Boing)
 [![Platform](https://img.shields.io/cocoapods/p/Boing.svg?style=flat)](http://cocoapods.org/pods/Boing)
-[![License](https://img.shields.io/cocoapods/l/Boing.svg?style=flat)](https://github.com/pokanop/boing/blob/master/LICENSE)
+[![License](https://img.shields.io/cocoapods/l/Boing.svg?style=flat)](https://github.com/pokanop/boing/blob/main/LICENSE)
 
 Boing is a simple and powerful animation API for views written in Swift. Inspired by many other animation libraries out there, it tries to aggregate and simplify many options into a single and seamless integration that can be reused in any project.
 

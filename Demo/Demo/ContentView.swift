@@ -40,7 +40,7 @@ struct ContentView: View {
                         .pickerStyle(SegmentedPickerStyle())
                         
                         if showPresets {
-                            ForEach(0..<AnimationType.presetCases.count) { idx in
+                            ForEach(0..<AnimationType.presetCases.count, id: \.self) { idx in
                                 PresetButton(animation: AnimationType.allCases[idx], isAnimating: self.$isAnimating, store: self.store)
                             }
                         } else {
@@ -69,7 +69,7 @@ struct ContentView: View {
                 .modifier(KeyboardAdapter())
             }
             .navigationBarTitle("The Boing Demo")
-            .navigationBarItems(trailing: EditButton())
+            .navigationBarItems(trailing: showPresets ? nil : EditButton())
         }
     }
     
